@@ -4,7 +4,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { PagoDocentesComponent } from './components/pago-docentes/pago-docentes.component';
 
-const routes: Routes = [];
+import { AuthGuard } from "./auth.guard";
+
+const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'pagodocentes',
+    component: PagoDocentesComponent,
+    canActivate: [AuthGuard]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
