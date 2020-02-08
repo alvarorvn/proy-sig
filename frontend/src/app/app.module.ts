@@ -10,18 +10,31 @@ import { PagoDocentesComponent } from './components/pago-docentes/pago-docentes.
 
 import { AuthGuard } from "./auth.guard";
 import { TokenInterceptorService } from "./services/token-interceptor.service";
+import { IndexComponent } from './components/index/index.component';
+import { PersonalComponent } from './components/personal/personal.component';
+
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ToastrService, ToastrModule } from "ngx-toastr";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    PagoDocentesComponent
+    PagoDocentesComponent,
+    IndexComponent,
+    PersonalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true
+    })
   ],
   providers: [
     AuthGuard,

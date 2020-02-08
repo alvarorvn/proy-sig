@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.user).subscribe(
       res => {
         localStorage.setItem('token', res.token);
-        this.router.navigate(['/pagodocentes']);
+        this.router.navigate(['/']);
       },
       err => {
         console.log(err);

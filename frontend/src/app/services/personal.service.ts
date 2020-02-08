@@ -1,0 +1,28 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PersonalService {
+
+  private URL = 'http://localhost:3000';
+
+  constructor(private http: HttpClient) { }
+
+  getCiudades() {
+    return this.http.get<any>(`${this.URL}/personal/ciudades`);
+  }
+
+  register(personal) {
+    return this.http.post<any>(`${this.URL}/personal`, personal);
+  }
+
+  getAllPersonal() {
+    return this.http.get<any>(`${this.URL}/personal`);
+  }
+
+  updatePersonal(personal) {
+    return this.http.put<any>(`${this.URL}/personal`, personal);
+  }
+}

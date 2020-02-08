@@ -1,24 +1,24 @@
 const objOracle = require('oracledb');
 
 conn_string = {
-    user          : "USR_ORACLE",
-    password      : "oracle123",
-    connectString : "localhost:1521/xe"
+    user: "USR_ORACLE",
+    password: "oracle123",
+    connectString: "alvaro-VirtualBox:1521/xe"
 };
 
-function error(err, rs, cn){
-    if(err){
+function error(err, rs, cn) {
+    if (err) {
         console.log(err.message);
         rs.contentType('application/json').status(500);
         rs.send(err.message);
-        if (cn!=null) close(cn);
+        if (cn != null) close(cn);
         return -1;
-    }else{
+    } else {
         return 0;
     }
 }
 
-function open(sql, binds, dml, rs){
+function open(sql, binds, dml, rs) {
     /*objOracle.getConnection(conn_string, (err, cn)=>{
         if(error(err, rs, null)==-1) return;
         cn.execute(sql, binds, {autoCommit: dml}, (err, result)=>{
@@ -38,29 +38,31 @@ function open(sql, binds, dml, rs){
             return obj_result;
         })
     })*/
-    return new Promise((res, rej)=>{
+    return new Promise((res, rej) => {
         objOracle.getConnection(conn_string)
-        .then((cn)=>{
-            cn.execute(sql, binds, {autoCommit: dml}).then((result)=>{
-                if(dml){
-                    res(SON.stringify(result.rowsAffected));
-                }else{
-                    res(JSON.stringify(result.rows));
-                }
-                close(cn);
-            }).catch((err)=>{
-                if(error(err, rs, cn)==-1) return;
+            .then((cn) => {
+                cn.execute(sql, binds, { autoCommit: dml }).then((result) => {
+                    if (dml) {
+                        res(JSON.stringify(result.rowsAffected));
+                    } else {
+                        res(JSON.stringify(result.rows));
+                    }
+                    close(cn);
+                }).catch((err) => {
+                    //if (error(err, rs, cn) == -1) return;
+                    rej(err.message);
+                })
+            }).catch((err) => {
+                //if (error(err, rs, null) == -1) return;
+                rej(err.message);
             })
-        }).catch((err)=>{
-            if(error(err, rs, null)==-1) return;
-        })
     })
 }
 
-function close(cn){
+function close(cn) {
     cn.release(
-        function(err){
-            if(err) {console.log(err.message);}
+        function (err) {
+            if (err) { console.log(err.message); }
         }
     );
 }
