@@ -50,6 +50,8 @@ export class PersonalComponent implements OnInit {
           } else {
             this.toastr.success(res.message, "Éxito");
             this.getAllPersonal();
+            this.clearForm(this.personal);
+            (<HTMLInputElement>document.getElementById("pers_cedula")).disabled = false;
           }
         },
         err => {
@@ -64,6 +66,7 @@ export class PersonalComponent implements OnInit {
           } else {
             this.toastr.success(res.message, "Éxito");
             this.getAllPersonal();
+            this.clearForm(this.personal);
           }
         },
         err => {
@@ -91,6 +94,18 @@ export class PersonalComponent implements OnInit {
     }
   }
 
+  clearForm(personal) {
+    personal.pers_cedula = "";
+    personal.pers_nombres = "";
+    personal.pers_apellidos = "";
+    personal.pers_email = "";
+    personal.pers_fecha_nac = "";
+    personal.pers_telf = "";
+    personal.pers_sexo = this.sexo[0];
+    personal.pers_tipo = this.tipos[0];
+    personal.ciudad_id = "0";
+  }
+
   getCiudades() {
     this.personalService.getCiudades().subscribe(
       res => {
@@ -116,5 +131,21 @@ export class PersonalComponent implements OnInit {
     this.personal.pers_tipo = personalEdit[7];
     this.personal.ciudad_id = personalEdit[9];
     (<HTMLInputElement>document.getElementById("pers_cedula")).disabled = true;
+  }
+
+  deletePersonal(ced) {
+    this.personalService.deletePersonal(ced).subscribe(
+      res => {
+        if (res.tipo == 'error') {
+          this.toastr.error(res.message, "Error");
+        } else {
+          this.toastr.success(res.message, "Éxito");
+          this.getAllPersonal();
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    )
   }
 }

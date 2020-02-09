@@ -3,7 +3,7 @@ const objOracle = require('oracledb');
 conn_string = {
     user: "USR_ORACLE",
     password: "oracle123",
-    connectString: "192.168.1.100:1521/xe"
+    connectString: "192.168.10.100:1521/xe"
 };
 
 function error(err, rs, cn) {

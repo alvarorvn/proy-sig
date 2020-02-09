@@ -56,10 +56,10 @@ async function deletePersonal(req, res) {
     try {
         let sql = `DELETE FROM personal where pers_cedula = '${req.params.ced}'`;
         let result = JSON.parse(await oracleUtil.open(sql, [], true, res));
-        if (result == 0) return res.json({ message: "No existe el usuario a eliminar" });
-        return res.json({ message: "Personal eliminado con exito" });
+        if (result == 0) return res.json({ message: "No existe el usuario a eliminar", tipo: "error" });
+        return res.json({ message: "Personal eliminado con exito", tipo: "exito" });
     } catch (err) {
-        return res.json({ message: "Error al eliminar usuario" });
+        return res.json({ message: "Error al eliminar usuario", tipo: "error" });
     }
 }
 
@@ -75,7 +75,7 @@ async function getCiudades(req, res) {
 }
 
 async function updatePersonal(req, res) {
-    /*const { pers_cedula, pers_nombres, pers_apellidos, pers_email, pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id } = req.body;
+    const { pers_cedula, pers_nombres, pers_apellidos, pers_email, pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id } = req.body;
     if (validacion.campoVacio(pers_cedula) || validacion.campoVacio(pers_nombres) || validacion.campoVacio(pers_apellidos)
         || validacion.campoVacio(pers_email) || validacion.campoVacio(pers_fecha_nac) || validacion.campoVacio(pers_telf)
         || validacion.campoVacio(pers_sexo) || validacion.campoVacio(pers_tipo) || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
@@ -90,35 +90,12 @@ async function updatePersonal(req, res) {
             pers_fecha_nac = to_date('${date_formatter}','dd/mm/yyyy'), pers_telf = '${pers_telf}', pers_sexo = '${pers_sexo}', 
             pers_tipo = '${pers_tipo}', ciudad_id= '${ciudad_id}'
             WHERE pers_cedula = '${req.params.ced}'`;
-        result = await oracleUtil.openUpdate(sql, [], true, res);
-        console.log(result);
-        //if (result == 1) return res.json({ message: "Personal actualizado con exito", tipo: "exito" });
+        result = await oracleUtil.open(sql, [], true, res);
+        if (result == 1) return res.json({ message: "Personal actualizado con exito", tipo: "exito" });
     } catch (error) {
         console.log(error);
         return res.json({ message: "Error al registrar personal", tipo: "error" });
-    }*/
-    var part = {
-        pers_cedula: "0000000000",
-        pers_nombres: "Jose Maria",
-        pers_apellidos: "Cajamarca Sanchez",
-        pers_email: "fcaja@gmail.com",
-        pers_fecha_nac: "1974-03-18",
-        pers_telf: "0986587425",
-        pers_sexo: "Masculino",
-        pers_tipo: "Docente",
-        ciudad_id: 1
     }
-
-    console.log(typeof part.ciudad_id);
-    var query = `update personal
-        set
-        pers_nombres = '${part.pers_nombres}'
-        where pers_cedula = '${part.pers_cedula}'`
-    console.log(query);
-
-    /*let result = await oracleUtil.openUpdate(query, part);
-    console.log(result);*/
-    res.send('Nada')
 }
 
 module.exports = {
