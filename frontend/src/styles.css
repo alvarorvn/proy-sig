@@ -234,3 +234,7 @@ button.toast-close-button {
 table th {
     text-align: center;
 }
+
+.center-h {
+    margin: 0 auto;
+}

@@ -3,7 +3,7 @@ const objOracle = require('oracledb');
 conn_string = {
     user: "USR_ORACLE",
     password: "oracle123",
-    connectString: "alvaro-VirtualBox:1521/xe"
+    connectString: "192.168.1.100:1521/xe"
 };
 
 function error(err, rs, cn) {
@@ -59,6 +59,29 @@ function open(sql, binds, dml, rs) {
     })
 }
 
+function openUpdate(sql ){
+    return new Promise((res, rej) => {
+        objOracle.getConnection(conn_string)
+            .then((cn) => {
+                console.log('aqui');
+                cn.execute(sql).then((resp) => {
+                    //logger.debug({ message: 'Data updated', data: { resp } })
+                    console.log('Data updated');
+                    cn.commit()
+                    res(resp)
+                }).catch((err) => {
+                    //logger.error({ message: `Error in update`, data: err.toString() })
+                    console.log('Error in update');
+                    cn.rollback()
+                    rej(err)
+                })
+            }).catch((err) => {
+                //if (error(err, rs, null) == -1) return;
+                rej(err.message);
+            })
+    })
+}
+
 function close(cn) {
     cn.release(
         function (err) {
@@ -69,5 +92,6 @@ function close(cn) {
 
 module.exports = {
     open,
-    close
+    close,
+    openUpdate
 }

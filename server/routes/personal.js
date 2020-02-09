@@ -7,6 +7,7 @@ router.get('/ciudades', validacion.verifyToken, personal.getCiudades);
 router.post('/', validacion.verifyToken, personal.register);
 router.get('/', validacion.verifyToken, personal.getAllPersonal);
 router.get('/:ced', validacion.verifyToken, personal.getPersonal);
+router.put('/:ced', validacion.verifyToken, personal.updatePersonal);
 router.delete('/:ced', validacion.verifyToken, personal.deletePersonal);
 
 module.exports = router;

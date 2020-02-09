@@ -43,7 +43,19 @@ export class PersonalComponent implements OnInit {
   save() {
     let input_ced = (<HTMLInputElement>document.getElementById("pers_cedula"));
     if (input_ced.disabled) {
-      console.log('dis');
+      this.personalService.updatePersonal(this.personal).subscribe(
+        res => {
+          if (res.tipo == 'error') {
+            this.toastr.error(res.message, "Error");
+          } else {
+            this.toastr.success(res.message, "Éxito");
+            this.getAllPersonal();
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      )
     } else {
       this.personalService.register(this.personal).subscribe(
         res => {

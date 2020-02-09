@@ -23,6 +23,6 @@ export class PersonalService {
   }
 
   updatePersonal(personal) {
-    return this.http.put<any>(`${this.URL}/personal`, personal);
+    return this.http.put<any>(`${this.URL}/personal/${personal.pers_cedula}`, personal);
   }
 }
