@@ -5,6 +5,8 @@ import { LoginComponent } from './components/login/login.component';
 import { PagoDocentesComponent } from './components/pago-docentes/pago-docentes.component';
 import { IndexComponent } from './components/index/index.component';
 import { PersonalComponent } from './components/personal/personal.component';
+import { RepresentantesComponent } from "./components/representantes/representantes.component";
+import { EstudiantesComponent } from "./components/estudiantes/estudiantes.component";
 
 import { AuthGuard, AuthGuard2 } from "./auth.guard";
 
@@ -23,6 +25,16 @@ const routes: Routes = [
   {
     path: 'personal',
     component: PersonalComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'representante',
+    component: RepresentantesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'estudiante',
+    component: EstudiantesComponent,
     canActivate: [AuthGuard]
   },
   {

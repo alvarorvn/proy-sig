@@ -1,0 +1,99 @@
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-primary center-h">
+            <div class="card-header">Registro/actualización de representantes</div>
+            <div class="card-body">
+                <form #repreForm="ngForm">
+                    <fieldset>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Cedula</label>
+                                <input type="text" [(ngModel)]="repre.rep_cedula" class="form-control"
+                                    name="rep_cedula" id="rep_cedula" placeholder="Cedula" required autofocus>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Nombres</label>
+                                <input type="text" [(ngModel)]="repre.rep_nombres" class="form-control"
+                                    name="rep_nombres" placeholder="Nombres" required>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Apellidos</label>
+                                <input type="text" [(ngModel)]="repre.rep_apellidos" class="form-control"
+                                    name="rep_apellidos" placeholder="Apellidos" required>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Correo electronico</label>
+                                <input type="text" [(ngModel)]="repre.rep_email" class="form-control"
+                                    name="rep_email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Telefono</label>
+                                <input type="text" [(ngModel)]="repre.rep_telf" class="form-control"
+                                    name="rep_telf" placeholder="Telefono" required>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Ciudad</label>
+                                <select class="form-control" [(ngModel)]="repre.ciudad_id" name="ciudad_id">
+                                    <option *ngFor="let ciudad of ciudades" [value]="ciudad[0]">{{ciudad[1]}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <button class="btn btn-primary" style="margin-right: 30px; width: 110px;" (click)="save()">
+                                Guardar
+                            </button>
+                            <button class="btn btn-primary" style="width: 110px;" (click)="resetForm(repreForm)">
+                                Limpiar
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <table class="table table-sm table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Cedula</th>
+                    <th>Nombre Completo</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Ciudad</th>
+                    <th colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let representante of allRepre">
+                    <td>{{ representante[0] }}</td>
+                    <td>{{ representante[1] }} {{ representante[2] }}</td>
+                    <td>{{ representante[3] }}</td>
+                    <td>{{ representante[4] }}</td>
+                    <td>{{ representante[5] }}</td>
+                    <td>
+                        <a (click)="editRepre(representante)">
+                            <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a (click)="deleteRepre(representante[0])">
+                            <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker();
+        });
+    </script>
+</div>

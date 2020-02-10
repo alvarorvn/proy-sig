@@ -15,6 +15,8 @@ import { PersonalComponent } from './components/personal/personal.component';
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrService, ToastrModule } from "ngx-toastr";
+import { RepresentantesComponent } from './components/representantes/representantes.component';
+import { EstudiantesComponent } from './components/estudiantes/estudiantes.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { ToastrService, ToastrModule } from "ngx-toastr";
     LoginComponent,
     PagoDocentesComponent,
     IndexComponent,
-    PersonalComponent
+    PersonalComponent,
+    RepresentantesComponent,
+    EstudiantesComponent
   ],
   imports: [
     BrowserModule,
