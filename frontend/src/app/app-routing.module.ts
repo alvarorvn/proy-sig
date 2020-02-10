@@ -18,7 +18,7 @@ const routes: Routes = [
     pathMatch: 'full'*/
   },
   {
-    path: 'pagodocentes',
+    path: 'pagos',
     component: PagoDocentesComponent,
     canActivate: [AuthGuard]
   },
