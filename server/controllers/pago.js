@@ -37,17 +37,6 @@ async function getAllPagos(req, res) {
     }
 }
 
-/*async function getPersonal(req, res) {
-    try {
-        let sql = `SELECT * FROM personal where pers_cedula = '${req.params.ced}'`;
-        let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
-        if (result.length == 0) return res.json({ message: "No se ha encontrado al usuario seleccionado" });
-        return res.json(result);
-    } catch (error) {
-        return res.json({ message: "Error obtener personal" });
-    }
-}*/
-
 async function deletePago(req, res) {
     try {
         let sql = `DELETE FROM pago_personal where pgdoc_id = '${req.params.id}'`;
@@ -85,7 +74,6 @@ async function updatePago(req, res) {
 module.exports = {
     addPago,
     getAllPagos,
-    //getPersonal,
     updatePago,
     deletePago,
 }
