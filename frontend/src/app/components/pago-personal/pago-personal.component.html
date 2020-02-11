@@ -1,0 +1,124 @@
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-primary center-h">
+            <div class="card-header">Registro/actualización de pago a personal</div>
+            <div class="card-body">
+                <form #pagoPersonalForm="ngForm">
+                    <fieldset>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-8">
+                                <input type="text" [(ngModel)]="pago_pers.pgdoc_id" class="form-control" name="pgdoc_id"
+                                    type="hidden">
+                                <label style="margin: 0;">Personal</label>
+                                <ng-select placeholder="Buscar personal" [items]="allPersonalNames"
+                                    bindLabel="pers_nombres" bindValue="pers_ced" [(ngModel)]="pago_pers.pers_cedula"
+                                    name="pers_cedula" autofocus>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Abono</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control" [(ngModel)]="pago_pers.pgdoc_abono"
+                                        name="pgdoc_abono" placeholder="Abono" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Deuda</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control" [(ngModel)]="pago_pers.pgdoc_deuda"
+                                        name="pgdoc_deuda" placeholder="Deuda" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Mes</label>
+                                <!--<select class="form-control" [(ngModel)]="pago_pers.mes_id" name="mes_id">
+                                    <option *ngFor="let mes of meses" [value]="mes.mes_id">{{mes.mes_nombre}}</option>
+                                </select>-->
+                                <ng-select placeholder="Buscar mes" [items]="meses" bindLabel="mes_nombre"
+                                    bindValue="mes_id" [(ngModel)]="pago_pers.mes_id" name="mes_id" id="mes_id"
+                                    [closeOnSelect]=true>
+                                </ng-select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Año</label>
+                                <!--<select class="form-control" [(ngModel)]="pago_pers.anio_id" name="anio_id">
+                                    <option *ngFor="let anio of anios" [value]="anio.anio_id">{{anio.anio_numero}}
+                                    </option>
+                                </select>-->
+                                <ng-select placeholder="Buscar año" [items]="anios" bindLabel="anio_numero"
+                                    bindValue="anio_id" [(ngModel)]="pago_pers.anio_id" name="anio_id"
+                                    [closeOnSelect]=true>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <button class="btn btn-primary" style="margin-right: 30px; width: 110px;" (click)="save()">
+                                Guardar
+                            </button>
+                            <button class="btn btn-primary" style="width: 110px;" (click)="resetForm(pagoPersonalForm)">
+                                Limpiar
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <table class="table table-sm table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Personal</th>
+                    <th>Abono</th>
+                    <th>Deuda</th>
+                    <th>Mes</th>
+                    <th>Año</th>
+                    <th colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="allPagosPersonal.length == 0; else tablaLlena">
+                    <tr>
+                        <td colspan="7" style="color: red;">No hay registros de pagos!</td>
+                    </tr>
+                </ng-container>
+                <ng-template #tablaLlena>
+                    <tr *ngFor="let pp of allPagosPersonal">
+                        <td>{{ pp.pers_nombres }} {{ pp.pers_apellidos }}</td>
+                        <td>{{ pp.pgdoc_abono }}</td>
+                        <td>{{ pp.pgdoc_deuda }}</td>
+                        <td>{{ pp.mes_nombre }}</td>
+                        <td>{{ pp.anio_numero }}</td>
+                        <td>
+                            <a (click)="editPagoPersonal(pp)">
+                                <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a (click)="deletePagoPersonal(pp.pgdoc_id)">
+                                <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker();
+        });
+    </script>
+</div>

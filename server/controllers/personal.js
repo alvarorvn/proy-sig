@@ -41,6 +41,24 @@ async function getAllPersonal(req, res) {
     }
 }
 
+async function getAllPersonalNames(req, res) {
+    try {
+        let personalNames = [];
+        let sql = `SELECT pers.pers_cedula, pers.pers_nombres, pers.pers_apellidos FROM personal pers`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay personal registrado" });
+        result.forEach(pers => {
+            let obj = {};
+            obj.pers_ced = pers[0];
+            obj.pers_nombres = `${pers[1]} ${pers[2]}`;
+            personalNames.push(obj);
+        });
+        return res.json(personalNames);
+    } catch (error) {
+        return res.json({ message: "Error obtener personal" });
+    }
+}
+
 async function getPersonal(req, res) {
     try {
         let sql = `SELECT * FROM personal where pers_cedula = '${req.params.ced}'`;
@@ -93,7 +111,6 @@ async function updatePersonal(req, res) {
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Personal actualizado con exito", tipo: "exito" });
     } catch (error) {
-        console.log(error);
         return res.json({ message: "Error al registrar personal", tipo: "error" });
     }
 }
@@ -104,5 +121,6 @@ module.exports = {
     getPersonal,
     updatePersonal,
     deletePersonal,
-    getCiudades
+    getCiudades,
+    getAllPersonalNames
 }

@@ -22,6 +22,10 @@ export class PersonalService {
     return this.http.get<any>(`${this.URL}/personal`);
   }
 
+  getAllPersonalNames() {
+    return this.http.get<any>(`${this.URL}/personal/names`);
+  }
+
   updatePersonal(personal) {
     return this.http.put<any>(`${this.URL}/personal/${personal.pers_cedula}`, personal);
   }

@@ -14,4 +14,7 @@ router.get('/o', validacion.verifyToken, otros_pagos.getAllOtrosPagos);
 router.put('/o/:id', validacion.verifyToken, otros_pagos.updateOtroPago);
 router.delete('/o/:id', validacion.verifyToken, otros_pagos.deleteOtroPago);
 
+router.get('/meses', validacion.verifyToken, pagos.getMeses);
+router.get('/anios', validacion.verifyToken, pagos.getAnios);
+
 module.exports = router;

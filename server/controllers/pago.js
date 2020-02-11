@@ -23,6 +23,7 @@ async function addPago(req, res) {
 
 async function getAllPagos(req, res) {
     try {
+        let pagosPersonal = [];
         let sql = `SELECT pago.pgdoc_id, pago.pgdoc_abono, pago.pgdoc_deuda,
                     mes.mes_nombre, pago.mes_id,
                     anio.anio_numero, pago.anio_id,
@@ -30,8 +31,23 @@ async function getAllPagos(req, res) {
             FROM pago_personal pago, meses mes , anios anio, personal pers
             WHERE pago.mes_id = mes.mes_id AND pago.anio_id = anio.anio_id AND pago.pers_cedula = pers.pers_cedula`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
-        if (result.length == 0) return res.json({ message: "No hay pagos registrados" });
-        return res.json(result);
+        if (result.length == 0) return res.json({ message: "No hay pagos registrados", result });
+        result.forEach(mes => {
+            let obj = {};
+            obj.pgdoc_id = mes[0];
+            obj.pgdoc_abono = mes[1];
+            obj.pgdoc_deuda = mes[2];
+            obj.mes_nombre = mes[3];
+            obj.mes_id = mes[4];
+            obj.anio_numero = mes[5];
+            obj.anio_id = mes[6];
+            obj.pers_nombres = mes[7];
+            obj.pers_apellidos = mes[8];
+            obj.pers_cedula = mes[9];
+
+            pagosPersonal.push(obj);
+        });
+        return res.json(pagosPersonal);
     } catch (error) {
         return res.json({ message: "Error al obtener pagos" });
     }
@@ -71,9 +87,47 @@ async function updatePago(req, res) {
     }
 }
 
+async function getMeses(req, res) {
+    try {
+        let meses = [];
+        let sql = `SELECT * FROM meses`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay meses registrados", tipo: "error" });
+        result.forEach(mes => {
+            let obj = {};
+            obj.mes_id = mes[0];
+            obj.mes_nombre = `${mes[1]}`;
+            meses.push(obj);
+        });
+        return res.json(meses);
+    } catch (err) {
+        return res.json({ message: "Error al buscar meses", tipo: "error" });
+    }
+}
+
+async function getAnios(req, res) {
+    try {
+        let anios = [];
+        let sql = `SELECT * FROM anios`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay años registrados", tipo: "error" });
+        result.forEach(anio => {
+            let obj = {};
+            obj.anio_id = anio[0];
+            obj.anio_numero = `${anio[1]}`;
+            anios.push(obj);
+        });
+        return res.json(anios);
+    } catch (err) {
+        return res.json({ message: "Error al buscar años", tipo: "error" });
+    }
+}
+
 module.exports = {
     addPago,
     getAllPagos,
     updatePago,
     deletePago,
+    getMeses,
+    getAnios
 }

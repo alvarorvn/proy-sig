@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 //components
 import { LoginComponent } from './components/login/login.component';
-import { PagoDocentesComponent } from './components/pago-docentes/pago-docentes.component';
 import { IndexComponent } from './components/index/index.component';
 import { PersonalComponent } from './components/personal/personal.component';
 import { RepresentantesComponent } from "./components/representantes/representantes.component";
 import { EstudiantesComponent } from "./components/estudiantes/estudiantes.component";
+import { PagoPersonalComponent } from "./components/pago-personal/pago-personal.component";
+import { OtrosPagosComponent } from "./components/otros-pagos/otros-pagos.component";
+import { PensionesComponent } from "./components/pensiones/pensiones.component";
+import { OtrosIngresosComponent } from "./components/otros-ingresos/otros-ingresos.component";
 
 import { AuthGuard, AuthGuard2 } from "./auth.guard";
 
@@ -19,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'pagos',
-    component: PagoDocentesComponent,
+    component: PagoPersonalComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -35,6 +38,21 @@ const routes: Routes = [
   {
     path: 'estudiante',
     component: EstudiantesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'opagos',
+    component: OtrosPagosComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pensiones',
+    component: PensionesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'oingresos',
+    component: OtrosIngresosComponent,
     canActivate: [AuthGuard]
   },
   {
