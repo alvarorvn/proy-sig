@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Ng2SearchPipeModule } from "ng2-search-filter";
+import { NgxPaginationModule } from "ngx-pagination";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,7 +48,9 @@ import { OtrosIngresosComponent } from './components/otros-ingresos/otros-ingres
       positionClass: 'toast-bottom-right',
       preventDuplicates: true
     }),
-    NgSelectModule
+    NgSelectModule,
+    Ng2SearchPipeModule,
+    NgxPaginationModule
   ],
   providers: [
     AuthGuard,

@@ -29,6 +29,7 @@ export class EstudiantesComponent implements OnInit {
   ciudades: Array<Object> = [];
   representantes: Array<Object> = [["0", "Seleccionar..."]];
   allEstudiantes: Array<Object> = [];
+  p: number = 1;
 
   constructor(
     private personalService: PersonalService,

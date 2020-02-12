@@ -74,6 +74,9 @@
         </div>
     </div>
     <div class="col-md-7">
+        <div class="form-group">
+            <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
+        </div>
         <table class="table table-sm table-hover">
             <thead class="thead-dark">
                 <tr>
@@ -91,7 +94,8 @@
                     </tr>
                 </ng-container>
                 <ng-template #tablaLlena>
-                    <tr *ngFor="let est of allEstudiantes">
+                    <tr *ngFor="let est of allEstudiantes |filter:searchText|
+                        paginate: {itemsPerPage: 10, currentPage: p}">
                         <td>{{ est.est_cedula }}</td>
                         <td>{{ est.est_nombres }} {{ est.est_apellidop }} {{ est.est_apellidom }}</td>
                         <td>{{ est.ciudad_nombre }}</td>
@@ -110,5 +114,7 @@
                 </ng-template>
             </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
+            maxSize="15"></pagination-controls>
     </div>
 </div>
