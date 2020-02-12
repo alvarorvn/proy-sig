@@ -1,12 +1,13 @@
 const oracleUtil = require('../database/oracleUtil');
 const validacion = require('./validaciones.js');
-const datejs = require('datejs');
 
 async function register(req, res) {
-    const { pers_cedula, pers_nombres, pers_apellidos, pers_email, pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id } = req.body;
-    if (validacion.campoVacio(pers_cedula) || validacion.campoVacio(pers_nombres) || validacion.campoVacio(pers_apellidos)
-        || validacion.campoVacio(pers_email) || validacion.campoVacio(pers_fecha_nac) || validacion.campoVacio(pers_telf)
-        || validacion.campoVacio(pers_sexo) || validacion.campoVacio(pers_tipo) || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
+    const { pers_cedula, pers_nombres, pers_apellidop, pers_apellidom, pers_email,
+        pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id } = req.body;
+    if (validacion.campoVacio(pers_cedula) || validacion.campoVacio(pers_nombres) || validacion.campoVacio(pers_apellidop)
+        || validacion.campoVacio(pers_apellidom) || validacion.campoVacio(pers_email) || validacion.campoVacio(pers_fecha_nac)
+        || validacion.campoVacio(pers_telf) || validacion.campoVacio(pers_sexo) || validacion.campoVacio(pers_tipo)
+        || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
     try {
         let date_formatter = Date.parse(pers_fecha_nac).toString("dd/MM/yyyy");
@@ -14,9 +15,11 @@ async function register(req, res) {
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
         if (result) return res.json({ message: "Personal ya se encuentra registrado", tipo: "error" });
         sql = `INSERT INTO personal 
-            (pers_cedula, pers_nombres, pers_apellidos, pers_email, pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id)
-            VALUES ('${pers_cedula}','${pers_nombres}','${pers_apellidos}','${pers_email}',to_date('${date_formatter}','dd/mm/yyyy'),
-            '${pers_telf}','${pers_sexo}','${pers_tipo}','${ciudad_id}')`;
+            (pers_cedula, pers_nombres, pers_apellidop, pers_apellidom, pers_email, pers_fecha_nac, pers_telf, 
+                pers_sexo, pers_tipo, ciudad_id)
+            VALUES ('${pers_cedula}','${pers_nombres.toUpperCase()}','${pers_apellidop.toUpperCase()}', '${pers_apellidom.toUpperCase()}',
+            '${pers_email.toUpperCase()}', to_date('${date_formatter}','dd/mm/yyyy'), '${pers_telf}','${pers_sexo.toUpperCase()}',
+            '${pers_tipo.toUpperCase()}','${ciudad_id}')`;
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Personal registrado con exito", tipo: "exito" });
     } catch (error) {
@@ -27,26 +30,29 @@ async function register(req, res) {
 async function getAllPersonal(req, res) {
     try {
         let personas = [];
-        let sql = `SELECT personal.pers_cedula, personal.pers_nombres, personal.pers_apellidos, personal.pers_email, personal.pers_fecha_nac, 
-        personal.pers_telf, personal.pers_sexo, personal.pers_tipo, ciudades.ciudad_nombre, ciudades.ciudad_id FROM personal, ciudades 
-        WHERE personal.ciudad_id = ciudades.ciudad_id`;
+        let sql = `SELECT pers.pers_cedula, pers.pers_nombres, pers.pers_apellidop, pers.pers_apellidom, pers.pers_email, 
+                        pers.pers_fecha_nac, pers.pers_telf, pers.pers_sexo, pers.pers_tipo, 
+                        ciu.ciudad_nombre, ciu.ciudad_id 
+                    FROM personal pers, ciudades ciu
+                    WHERE pers.ciudad_id = ciu.ciudad_id`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
         result.forEach(personal => {
-            let datef = validacion.formatt_date(personal[4]);
-            personal[4] = datef;
+            let datef = validacion.formatt_date(personal[5]);
+            personal[5] = datef;
         });
         result.forEach(pers => {
             let obj = {};
             obj.pers_cedula = pers[0];
             obj.pers_nombres = pers[1];
-            obj.pers_apellidos = pers[2];
-            obj.pers_email = pers[3];
-            obj.pers_fecha_nac = pers[4];
-            obj.pers_telf = pers[5];
-            obj.pers_sexo = pers[6];
-            obj.pers_tipo = pers[7];
-            obj.ciudad_nombre = pers[8];
-            obj.ciudad_id = pers[9];
+            obj.pers_apellidop = pers[2];
+            obj.pers_apellidom = pers[3];
+            obj.pers_email = pers[4];
+            obj.pers_fecha_nac = pers[5];
+            obj.pers_telf = pers[6];
+            obj.pers_sexo = pers[7];
+            obj.pers_tipo = pers[8];
+            obj.ciudad_nombre = pers[9];
+            obj.ciudad_id = pers[10];
             personas.push(obj);
         });
         if (result.length == 0) return res.json({ message: "No hay usuarios registrados", result });
@@ -55,24 +61,6 @@ async function getAllPersonal(req, res) {
         return res.json({ message: "Error obtener personal" });
     }
 }
-
-/*async function getAllPersonalNames(req, res) {
-    try {
-        let personalNames = [];
-        let sql = `SELECT pers.pers_cedula, pers.pers_nombres, pers.pers_apellidos FROM personal pers`;
-        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
-        if (result.length == 0) return res.json({ message: "No hay personal registrado" });
-        result.forEach(pers => {
-            let obj = {};
-            obj.pers_ced = pers[0];
-            obj.pers_nombres = `${pers[1]} ${pers[2]}`;
-            personalNames.push(obj);
-        });
-        return res.json(personalNames);
-    } catch (error) {
-        return res.json({ message: "Error obtener personal" });
-    }
-}*/
 
 async function getPersonal(req, res) {
     try {
@@ -89,7 +77,7 @@ async function deletePersonal(req, res) {
     try {
         let sql = `DELETE FROM personal where pers_cedula = '${req.params.ced}'`;
         let result = JSON.parse(await oracleUtil.open(sql, [], true, res));
-        if (result == 0) return res.json({ message: "No existe el usuario a eliminar", tipo: "error" });
+        if (result == 0) return res.json({ message: "No existe personal a eliminar", tipo: "error" });
         return res.json({ message: "Personal eliminado con exito", tipo: "exito" });
     } catch (err) {
         return res.json({ message: "Error al eliminar usuario", tipo: "error" });
@@ -115,10 +103,12 @@ async function getCiudades(req, res) {
 }
 
 async function updatePersonal(req, res) {
-    const { pers_cedula, pers_nombres, pers_apellidos, pers_email, pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id } = req.body;
-    if (validacion.campoVacio(pers_cedula) || validacion.campoVacio(pers_nombres) || validacion.campoVacio(pers_apellidos)
-        || validacion.campoVacio(pers_email) || validacion.campoVacio(pers_fecha_nac) || validacion.campoVacio(pers_telf)
-        || validacion.campoVacio(pers_sexo) || validacion.campoVacio(pers_tipo) || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
+    const { pers_cedula, pers_nombres, pers_apellidop, pers_apellidom, pers_email,
+        pers_fecha_nac, pers_telf, pers_sexo, pers_tipo, ciudad_id } = req.body;
+    if (validacion.campoVacio(pers_cedula) || validacion.campoVacio(pers_nombres) || validacion.campoVacio(pers_apellidop)
+        || validacion.campoVacio(pers_apellidom) || validacion.campoVacio(pers_email) || validacion.campoVacio(pers_fecha_nac)
+        || validacion.campoVacio(pers_telf) || validacion.campoVacio(pers_sexo) || validacion.campoVacio(pers_tipo)
+        || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
     try {
         let date_formatter = Date.parse(pers_fecha_nac).toString("dd/MM/yyyy");
@@ -126,14 +116,15 @@ async function updatePersonal(req, res) {
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
         if (!result) return res.json({ message: "No existe personal registrado a editar", tipo: "error" });
         sql = `UPDATE personal SET
-            pers_nombres = '${pers_nombres}', pers_apellidos = '${pers_apellidos}', pers_email = '${pers_email}', 
-            pers_fecha_nac = to_date('${date_formatter}','dd/mm/yyyy'), pers_telf = '${pers_telf}', pers_sexo = '${pers_sexo}', 
-            pers_tipo = '${pers_tipo}', ciudad_id= '${ciudad_id}'
+            pers_nombres = '${pers_nombres.toUpperCase()}', pers_apellidop = '${pers_apellidop.toUpperCase()}',
+            pers_apellidom = '${pers_apellidom.toUpperCase()}', pers_email = '${pers_email.toUpperCase()}', 
+            pers_fecha_nac = to_date('${date_formatter}','dd/mm/yyyy'), pers_telf = '${pers_telf}', 
+            pers_sexo = '${pers_sexo.toUpperCase()}', pers_tipo = '${pers_tipo.toUpperCase()}', ciudad_id= '${ciudad_id}'
             WHERE pers_cedula = '${req.params.ced}'`;
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Personal actualizado con exito", tipo: "exito" });
     } catch (error) {
-        return res.json({ message: "Error al registrar personal", tipo: "error" });
+        return res.json({ message: "Error al registrar personal", tipo: "error" , error});
     }
 }
 

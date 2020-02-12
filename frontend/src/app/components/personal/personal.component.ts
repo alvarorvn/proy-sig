@@ -13,7 +13,8 @@ export class PersonalComponent implements OnInit {
   personal = {
     pers_cedula: "",
     pers_nombres: "",
-    pers_apellidos: "",
+    pers_apellidop: "",
+    pers_apellidom: "",
     pers_email: "",
     pers_fecha_nac: "",
     pers_telf: "",
@@ -22,22 +23,30 @@ export class PersonalComponent implements OnInit {
     ciudad_id: "0"
   }
 
-  sexo: string[] = ["Masculino", "Femenino"];
-  tipos: string[] = ["Personal", "Docente"];
-  ciudades: Array<Object> = [["0", "Seleccionar..."]];
+  p: number = 1;
+  sexo: Array<Object> = [
+    { sexo_id: 'MASCULINO', sexo_nombre: 'Masculino' },
+    { sexo_id: 'FEMENINO', sexo_nombre: 'Femenino' }
+  ];
+  tipos: Array<Object> = [
+    { tipo_id: 'PERSONAL', tipo_nombre: 'Personal' },
+    { tipo_id: 'DOCENTE', tipo_nombre: 'Docente' }
+  ];
+  ciudades: Array<Object> = [];
   allPersonal: Array<Object> = [];
 
   constructor(
     private personalService: PersonalService,
     private toastr: ToastrService
   ) {
-    this.personal['pers_sexo'] = this.sexo[0];
-    this.personal['pers_tipo'] = this.tipos[0];
   }
 
   ngOnInit() {
     this.getCiudades();
     this.getAllPersonal();
+    this.personal['pers_sexo'] = null;
+    this.personal['ciudad_id'] = null;
+    this.personal['pers_tipo'] = null;
   }
 
   save() {
@@ -63,6 +72,7 @@ export class PersonalComponent implements OnInit {
         res => {
           if (res.tipo == 'error') {
             this.toastr.error(res.message, "Error");
+            this.getAllPersonal();
           } else {
             this.toastr.success(res.message, "Éxito");
             this.getAllPersonal();
@@ -101,7 +111,8 @@ export class PersonalComponent implements OnInit {
   clearForm(personal) {
     personal.pers_cedula = null;
     personal.pers_nombres = null;
-    personal.pers_apellidos = null;
+    personal.pers_apellidop = null;
+    personal.pers_apellidom = null;
     personal.pers_email = null;
     personal.pers_fecha_nac = null;
     personal.pers_telf = null;
@@ -113,10 +124,7 @@ export class PersonalComponent implements OnInit {
   getCiudades() {
     this.personalService.getCiudades().subscribe(
       res => {
-        res.forEach(ciudad => {
-          this.ciudades.push(ciudad);
-        });
-        this.personal['ciudad_id'] = this.ciudades[0][0];
+        this.ciudades = res;
       },
       err => {
         console.log(err);
@@ -125,15 +133,6 @@ export class PersonalComponent implements OnInit {
   }
 
   editPersonal(personalEdit) {
-    /*this.personal.pers_cedula = personalEdit[0];
-    this.personal.pers_nombres = personalEdit[1];
-    this.personal.pers_apellidos = personalEdit[2];
-    this.personal.pers_email = personalEdit[3];
-    this.personal.pers_fecha_nac = personalEdit[4];
-    this.personal.pers_telf = personalEdit[5];
-    this.personal.pers_sexo = personalEdit[6];
-    this.personal.pers_tipo = personalEdit[7];
-    this.personal.ciudad_id = personalEdit[9];*/
     this.personal = personalEdit;
     (<HTMLInputElement>document.getElementById("pers_cedula")).disabled = true;
   }

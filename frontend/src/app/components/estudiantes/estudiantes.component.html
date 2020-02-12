@@ -78,7 +78,7 @@
             <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
         </div>
         <table class="table table-sm table-hover">
-            <thead class="thead-dark">
+            <thead class="bg-primary">
                 <tr>
                     <th>Cedula</th>
                     <th>Nombre Completo</th>
@@ -95,14 +95,14 @@
                 </ng-container>
                 <ng-template #tablaLlena>
                     <tr *ngFor="let est of allEstudiantes |filter:searchText|
-                        paginate: {itemsPerPage: 10, currentPage: p}">
+                        paginate: {itemsPerPage: 11, currentPage: p}">
                         <td>{{ est.est_cedula }}</td>
                         <td>{{ est.est_nombres }} {{ est.est_apellidop }} {{ est.est_apellidom }}</td>
                         <td>{{ est.ciudad_nombre }}</td>
                         <td>{{ est.rep_nombres }} {{ est.rep_apellidop }} {{ est.rep_apellidom }}</td>
                         <td>
                             <a (click)="editEstudiante(est)">
-                                <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
+                                <i class="fas fa-edit btn btn-outline-success btn-sm"></i>
                             </a>
                         </td>
                         <td>

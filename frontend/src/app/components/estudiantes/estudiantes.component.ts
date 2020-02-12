@@ -27,7 +27,7 @@ export class EstudiantesComponent implements OnInit {
     { sexo_id: 'F', sexo_nombre: 'Femenino' }
   ];
   ciudades: Array<Object> = [];
-  representantes: Array<Object> = [["0", "Seleccionar..."]];
+  representantes: Array<Object> = [];
   allEstudiantes: Array<Object> = [];
   p: number = 1;
 

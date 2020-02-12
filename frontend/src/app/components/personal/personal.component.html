@@ -11,17 +11,22 @@
                                 <input type="text" [(ngModel)]="personal.pers_cedula" class="form-control"
                                     name="pers_cedula" id="pers_cedula" placeholder="Cedula" required autofocus>
                             </div>
-                        </div>
-                        <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Nombres</label>
                                 <input type="text" [(ngModel)]="personal.pers_nombres" class="form-control"
                                     name="pers_nombres" placeholder="Nombres" required>
                             </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
-                                <label style="margin: 0;">Apellidos</label>
-                                <input type="text" [(ngModel)]="personal.pers_apellidos" class="form-control"
-                                    name="pers_apellidos" placeholder="Apellidos" required>
+                                <label style="margin: 0;">Apellido paterno</label>
+                                <input type="text" [(ngModel)]="personal.pers_apellidop" class="form-control"
+                                    name="pers_apellidop" placeholder="Apellido paterno" required>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Apellido materno</label>
+                                <input type="text" [(ngModel)]="personal.pers_apellidom" class="form-control"
+                                    name="pers_apellidom" placeholder="Apellido materno" required>
                             </div>
                         </div>
                         <div class="row" style="margin: auto;">
@@ -45,24 +50,23 @@
                             </div>
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Sexo</label>
-                                <select class="form-control" [(ngModel)]="personal.pers_sexo" name="pers_sexo">
-                                    <option [value]="item" *ngFor="let item of sexo">{{item}}</option>
-                                </select>
+                                <ng-select placeholder="Seleccionar sexo" [items]="sexo" bindLabel="sexo_nombre"
+                                    bindValue="sexo_id" [(ngModel)]="personal.pers_sexo" name="pers_sexo">
+                                </ng-select>
                             </div>
                         </div>
                         <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Tipo</label>
-                                <select class="form-control" [(ngModel)]="personal.pers_tipo" name="pers_tipo"
-                                    placeholder="Seleccionar tipo...">
-                                    <option [value]="item" *ngFor="let item of tipos">{{item}}</option>
-                                </select>
+                                <ng-select placeholder="Seleccionar tipo" [items]="tipos" bindLabel="tipo_nombre"
+                                    bindValue="tipo_id" [(ngModel)]="personal.pers_tipo" name="pers_tipo">
+                                </ng-select>
                             </div>
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Ciudad</label>
-                                <select class="form-control" [(ngModel)]="personal.ciudad_id" name="ciudad_id">
-                                    <option *ngFor="let ciudad of ciudades" [value]="ciudad[0]">{{ciudad[1]}}</option>
-                                </select>
+                                <ng-select placeholder="Seleccionar ciudad" [items]="ciudades" bindLabel="ciudad_nombre"
+                                    bindValue="ciudad_id" [(ngModel)]="personal.ciudad_id" name="ciudad_id">
+                                </ng-select>
                             </div>
                         </div>
                         <div class="row" style="justify-content: center;">
@@ -79,6 +83,9 @@
         </div>
     </div>
     <div class="col-md-7">
+        <div class="form-group">
+            <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
+        </div>
         <table class="table table-sm table-hover">
             <thead class="bg-primary">
                 <tr>
@@ -98,16 +105,17 @@
                     </tr>
                 </ng-container>
                 <ng-template #tablaLlena>
-                    <tr *ngFor="let pers of allPersonal">
+                    <tr *ngFor="let pers of allPersonal |filter:searchText|
+                    paginate: {itemsPerPage: 11, currentPage: p}">
                         <td>{{ pers.pers_cedula }}
-                        <td>{{ pers.pers_nombres }} {{ pers.pers_apellidos }}</td>
+                        <td>{{ pers.pers_nombres }} {{ pers.pers_apellidop }} {{ pers.pers_apellidom }}</td>
                         <td>{{ pers.pers_email }}</td>
                         <td>{{ pers.pers_telf }}</td>
                         <td>{{ pers.pers_tipo }}</td>
                         <td>{{ pers.ciudad_nombre }}</td>
                         <td>
                             <a (click)="editPersonal(pers)">
-                                <i class="fas fa-edit btn btn-outline-primary btn-sm"></i>
+                                <i class="fas fa-edit btn btn-outline-success btn-sm"></i>
                             </a>
                         </td>
                         <td>
@@ -119,5 +127,7 @@
                 </ng-template>
             </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
+            maxSize="15"></pagination-controls>
     </div>
 </div>
