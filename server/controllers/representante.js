@@ -3,19 +3,19 @@ const validacion = require('./validaciones.js');
 const datejs = require('datejs');
 
 async function register(req, res) {
-    const { rep_cedula, rep_nombres, rep_apellidos, rep_email, rep_telf, ciudad_id } = req.body;
-    if (validacion.campoVacio(rep_cedula) || validacion.campoVacio(rep_nombres) || validacion.campoVacio(rep_apellidos)
-        || validacion.campoVacio(rep_email) || validacion.campoVacio(rep_telf) || validacion.campoVacio(ciudad_id)
-        || ciudad_id == 0)
+    const { rep_cedula, rep_nombres, rep_apellidop, rep_apellidom, rep_email, rep_telf, ciudad_id } = req.body;
+    if (validacion.campoVacio(rep_cedula) || validacion.campoVacio(rep_nombres) || validacion.campoVacio(rep_apellidop)
+        || validacion.campoVacio(rep_apellidom) || validacion.campoVacio(rep_email) || validacion.campoVacio(rep_telf)
+        || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
     try {
         let sql = `SELECT * FROM representantes where rep_cedula = '${rep_cedula}'`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
         if (result) return res.json({ message: "Representante ya se encuentra registrado", tipo: "error" });
         sql = `INSERT INTO representantes 
-            (rep_cedula, rep_nombres, rep_apellidos, rep_email, rep_telf, ciudad_id)
-            VALUES ('${rep_cedula}','${rep_nombres}','${rep_apellidos}','${rep_email}',
-            '${rep_telf}','${ciudad_id}')`;
+                    (rep_cedula, rep_nombres, rep_apellidop, rep_apellidom, rep_email, rep_telf, ciudad_id)
+                    VALUES ('${rep_cedula}','${rep_nombres.toUpperCase()}','${rep_apellidop.toUpperCase()}',
+                    '${rep_apellidom.toUpperCase()}','${rep_email.toUpperCase()}', '${rep_telf}','${ciudad_id}')`;
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Representante registrado con exito", tipo: "exito" });
     } catch (error) {
@@ -45,17 +45,6 @@ async function getAllRepresentantes(req, res) {
     }
 }
 
-/*async function getPersonal(req, res) {
-    try {
-        let sql = `SELECT * FROM personal where pers_cedula = '${req.params.ced}'`;
-        let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
-        if (result.length == 0) return res.json({ message: "No se ha encontrado al usuario seleccionado" });
-        return res.json(result);
-    } catch (error) {
-        return res.json({ message: "Error obtener personal" });
-    }
-}*/
-
 async function deleteRepresentante(req, res) {
     try {
         let sql = `DELETE FROM representantes where rep_cedula = '${req.params.ced}'`;
@@ -68,24 +57,26 @@ async function deleteRepresentante(req, res) {
 }
 
 async function updateRepresentante(req, res) {
-    const { rep_cedula, rep_nombres, rep_apellidos, rep_email, rep_telf, ciudad_id } = req.body;
-    if (validacion.campoVacio(rep_cedula) || validacion.campoVacio(rep_nombres) || validacion.campoVacio(rep_apellidos)
-        || validacion.campoVacio(rep_email) || validacion.campoVacio(rep_telf) || validacion.campoVacio(ciudad_id)
-        || ciudad_id == 0)
+    const { rep_cedula, rep_nombres, rep_apellidop, rep_apellidom, rep_email, rep_telf, ciudad_id } = req.body;
+    if (validacion.campoVacio(rep_cedula) || validacion.campoVacio(rep_nombres) || validacion.campoVacio(rep_apellidop)
+        || validacion.campoVacio(rep_apellidom) || validacion.campoVacio(rep_email) || validacion.campoVacio(rep_telf)
+        || validacion.campoVacio(ciudad_id) || ciudad_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
+
     try {
         let sql = `SELECT * FROM representantes where rep_cedula = '${req.params.ced}'`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
         if (!result) return res.json({ message: "No existe representante registrado a editar", tipo: "error" });
         sql = `UPDATE representantes SET
-            rep_nombres = '${rep_nombres}', rep_apellidos = '${rep_apellidos}', rep_email = '${rep_email}', 
-            rep_telf = '${rep_telf}', ciudad_id= '${ciudad_id}'
-            WHERE rep_cedula = '${req.params.ced}'`;
+                    rep_nombres = '${rep_nombres.toUpperCase()}', rep_apellidop = '${rep_apellidop.toUpperCase()}',
+                    rep_apellidom = '${rep_apellidom.toUpperCase()}', rep_email = '${rep_email.toUpperCase()}', 
+                    rep_telf = '${rep_telf}', ciudad_id= '${ciudad_id}'
+                WHERE rep_cedula = '${req.params.ced}'`;
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Representante actualizado con exito", tipo: "exito" });
     } catch (error) {
         console.log(error);
-        return res.json({ message: "Error al registrar representante", tipo: "error" });
+        return res.json({ message: "Error al actualizar representante", tipo: "error" });
     }
 }
 

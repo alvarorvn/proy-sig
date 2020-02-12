@@ -14,14 +14,14 @@ export class RepresentantesComponent implements OnInit {
   repre = {
     rep_cedula: "",
     rep_nombres: "",
-    rep_apellidos: "",
+    rep_apellidop: "",
+    rep_apellidom: "",
     rep_email: "",
     rep_telf: "",
-    ciudad_id: "0"
+    ciudad_id: ""
   }
 
-  tipos: string[] = ["Personal", "Docente"];
-  ciudades: Array<Object> = [["0", "Seleccionar..."]];
+  ciudades: Array<Object> = [];
   allRepre: Array<Object> = [];
 
   constructor(
@@ -29,12 +29,12 @@ export class RepresentantesComponent implements OnInit {
     private personalService: PersonalService,
     private toastr: ToastrService
   ) {
-    this.repre['rep_tipo'] = this.tipos[0];
   }
 
   ngOnInit() {
     this.getCiudades();
     this.getAllRepresentantes();
+    this.repre['ciudad_id'] = null;
   }
 
   save() {
@@ -60,6 +60,7 @@ export class RepresentantesComponent implements OnInit {
         res => {
           if (res.tipo == 'error') {
             this.toastr.error(res.message, "Error");
+            this.getAllRepresentantes();
           } else {
             this.toastr.success(res.message, "Éxito");
             this.getAllRepresentantes();
@@ -87,10 +88,7 @@ export class RepresentantesComponent implements OnInit {
   getCiudades() {
     this.personalService.getCiudades().subscribe(
       res => {
-        res.forEach(ciudad => {
-          this.ciudades.push(ciudad);
-        });
-        this.repre['ciudad_id'] = this.ciudades[0][0];
+        this.ciudades = res;
       },
       err => {
         console.log(err);
@@ -99,12 +97,7 @@ export class RepresentantesComponent implements OnInit {
   }
 
   editRepre(repreEdit) {
-    this.repre.rep_cedula = repreEdit[0];
-    this.repre.rep_nombres = repreEdit[1];
-    this.repre.rep_apellidos = repreEdit[2];
-    this.repre.rep_email = repreEdit[3];
-    this.repre.rep_telf = repreEdit[4];
-    this.repre.ciudad_id = repreEdit[6];
+    this.repre = repreEdit;
     (<HTMLInputElement>document.getElementById("rep_cedula")).disabled = true;
   }
 
@@ -125,12 +118,13 @@ export class RepresentantesComponent implements OnInit {
   }
 
   clearForm(repre) {
-    repre.rep_cedula = "";
-    repre.rep_nombres = "";
-    repre.rep_apellidos = "";
-    repre.rep_email = "";
-    repre.rep_telf = "";
-    repre.ciudad_id = "0";
+    repre.rep_cedula = null;
+    repre.rep_nombres = null;
+    repre.rep_apellidop = null;
+    repre.rep_apellidom = null;
+    repre.rep_email = null;
+    repre.rep_telf = null;
+    repre.ciudad_id = null;
   }
 
   resetForm(form?: NgForm) {
