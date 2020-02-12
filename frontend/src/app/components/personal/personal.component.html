@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-5">
-        <div class="card border-primary center-h">
+        <div class="card border-secondary center-h">
             <div class="card-header">Registro/actualización de personal</div>
             <div class="card-body">
                 <form #personalForm="ngForm">
@@ -53,7 +53,8 @@
                         <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Tipo</label>
-                                <select class="form-control" [(ngModel)]="personal.pers_tipo" name="pers_tipo">
+                                <select class="form-control" [(ngModel)]="personal.pers_tipo" name="pers_tipo"
+                                    placeholder="Seleccionar tipo...">
                                     <option [value]="item" *ngFor="let item of tipos">{{item}}</option>
                                 </select>
                             </div>
@@ -79,7 +80,7 @@
     </div>
     <div class="col-md-7">
         <table class="table table-sm table-hover">
-            <thead class="thead-dark">
+            <thead class="bg-primary">
                 <tr>
                     <th>Cedula</th>
                     <th>Nombre Completo</th>
@@ -91,31 +92,32 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let personal of allPersonal">
-                    <td>{{ personal[0] }}</td>
-                    <td>{{ personal[1] }} {{ personal[2] }}</td>
-                    <td>{{ personal[3] }}</td>
-                    <td>{{ personal[5] }}</td>
-                    <td>{{ personal[7] }}</td>
-                    <td>{{ personal[8] }}</td>
-                    <td>
-                        <a (click)="editPersonal(personal)">
-                            <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a (click)="deletePersonal(personal[0])">
-                            <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
-                        </a>
-                    </td>
-                </tr>
+                <ng-container *ngIf="allPersonal.length == 0; else tablaLlena">
+                    <tr>
+                        <td colspan="7" style="color: red;">No hay registros de personal!</td>
+                    </tr>
+                </ng-container>
+                <ng-template #tablaLlena>
+                    <tr *ngFor="let pers of allPersonal">
+                        <td>{{ pers.pers_cedula }}
+                        <td>{{ pers.pers_nombres }} {{ pers.pers_apellidos }}</td>
+                        <td>{{ pers.pers_email }}</td>
+                        <td>{{ pers.pers_telf }}</td>
+                        <td>{{ pers.pers_tipo }}</td>
+                        <td>{{ pers.ciudad_nombre }}</td>
+                        <td>
+                            <a (click)="editPersonal(pers)">
+                                <i class="fas fa-edit btn btn-outline-primary btn-sm"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a (click)="deletePersonal(pers.pers_cedula)">
+                                <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-template>
             </tbody>
         </table>
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $('.datepicker').datepicker();
-        });
-    </script>
 </div>

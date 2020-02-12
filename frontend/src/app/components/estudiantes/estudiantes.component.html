@@ -19,37 +19,45 @@
                                     name="est_nombres" placeholder="Nombres" required>
                             </div>
                             <div class="form-group col-6">
-                                <label style="margin: 0;">Apellidos</label>
-                                <input type="text" [(ngModel)]="estudiante.est_apellidos" class="form-control"
-                                    name="est_apellidos" placeholder="Apellidos" required>
+                                <label style="margin: 0;">Apellido paterno</label>
+                                <input type="text" [(ngModel)]="estudiante.est_apellidop" class="form-control"
+                                    name="est_apellidop" placeholder="Apellido paterno" required>
                             </div>
                         </div>
                         <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Apellido materno</label>
+                                <input type="text" [(ngModel)]="estudiante.est_apellidom" class="form-control"
+                                    name="est_apellidom" placeholder="Apellido materno" required>
+                            </div>
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Fecha de nacimiento</label>
                                 <input type="date" [(ngModel)]="estudiante.est_fecha_nac"
                                     (ngModelChange)="estudiante.est_fecha_nac = $event" class="form-control"
                                     name="est_fecha_nac" required>
                             </div>
-                            <div class="form-group col-6">
-                                <label style="margin: 0;">Sexo</label>
-                                <select class="form-control" [(ngModel)]="estudiante.est_sexo" name="est_sexo">
-                                    <option [value]="item" *ngFor="let item of sexo">{{item}}</option>
-                                </select>
-                            </div>
                         </div>
                         <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
-                                <label style="margin: 0;">Ciudad</label>
-                                <select class="form-control" [(ngModel)]="estudiante.ciudad_id" name="ciudad_id">
-                                    <option *ngFor="let ciudad of ciudades" [value]="ciudad[0]">{{ciudad[1]}}</option>
-                                </select>
+                                <label style="margin: 0;">Sexo</label>
+                                <ng-select placeholder="Buscar sexo" [items]="sexo" bindLabel="sexo_nombre"
+                                    bindValue="sexo_id" [(ngModel)]="estudiante.est_sexo" name="est_sexo">
+                                </ng-select>
                             </div>
                             <div class="form-group col-6">
+                                <label style="margin: 0;">Ciudad</label>
+                                <ng-select placeholder="Buscar ciudad" [items]="ciudades" bindLabel="ciudad_nombre"
+                                    bindValue="ciudad_id" [(ngModel)]="estudiante.ciudad_id" name="ciudad_id">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-9">
                                 <label style="margin: 0;">Representante</label>
-                                <select class="form-control" [(ngModel)]="estudiante.rep_cedula" name="rep_cedula">
-                                    <option *ngFor="let repre of representantes" [value]="repre[0]">{{repre[1]}} {{repre[2]}}</option>
-                                </select>
+                                <ng-select placeholder="Buscar representante" [items]="representantes"
+                                    bindLabel="rep_ncompleto" bindValue="rep_cedula" [(ngModel)]="estudiante.rep_cedula"
+                                    name="rep_cedula">
+                                </ng-select>
                             </div>
                         </div>
                         <div class="row" style="justify-content: center;">
@@ -71,37 +79,36 @@
                 <tr>
                     <th>Cedula</th>
                     <th>Nombre Completo</th>
-                    <th>Sexo</th>
                     <th>Ciudad</th>
                     <th>Representante</th>
                     <th colspan="2"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let est of allEstudiantes">
-                    <td>{{ est[0] }}</td>
-                    <td>{{ est[1] }} {{ est[2] }}</td>
-                    <td>{{ est[4] }}</td>
-                    <td>{{ est[5] }}</td>
-                    <td>{{ est[7] }} {{ est[8] }}</td>
-                    <td>
-                        <a (click)="editEstudiante(est)">
-                            <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a (click)="deleteEstudiante(est[0])">
-                            <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
-                        </a>
-                    </td>
-                </tr>
+                <ng-container *ngIf="allEstudiantes.length == 0; else tablaLlena">
+                    <tr>
+                        <td colspan="7" style="color: red;">No hay registros de estudiantes!</td>
+                    </tr>
+                </ng-container>
+                <ng-template #tablaLlena>
+                    <tr *ngFor="let est of allEstudiantes">
+                        <td>{{ est.est_cedula }}</td>
+                        <td>{{ est.est_nombres }} {{ est.est_apellidop }} {{ est.est_apellidom }}</td>
+                        <td>{{ est.ciudad_nombre }}</td>
+                        <td>{{ est.rep_nombres }} {{ est.rep_apellidop }} {{ est.rep_apellidom }}</td>
+                        <td>
+                            <a (click)="editEstudiante(est)">
+                                <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a (click)="deleteEstudiante(est.est_cedula)">
+                                <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-template>
             </tbody>
         </table>
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $('.datepicker').datepicker();
-        });
-    </script>
 </div>

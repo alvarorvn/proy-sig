@@ -23,6 +23,7 @@ async function addPension(req, res) {
 
 async function getAllPensiones(req, res) {
     try {
+        let pensiones = [];
         let sql = `SELECT pens.pens_id, pens.pens_abono, pens.pens_deuda,
                     mes.mes_nombre, pens.mes_id,
                     anio.anio_numero, pens.anio_id,
@@ -30,10 +31,43 @@ async function getAllPensiones(req, res) {
             FROM pensiones pens, meses mes , anios anio, estudiantes est
             WHERE pens.mes_id = mes.mes_id AND pens.anio_id = anio.anio_id AND pens.est_cedula = est.est_cedula`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
-        if (result.length == 0) return res.json({ message: "No hay pensiones registradas" });
-        return res.json(result);
+        if (result.length == 0) return res.json({ message: "No hay pensiones registradas", result });
+        result.forEach(pens => {
+            let obj = {};
+            obj.pens_id = pens[0];
+            obj.pens_abono = pens[1];
+            obj.pens_deuda = pens[2];
+            obj.mes_nombre = pens[3];
+            obj.mes_id = pens[4];
+            obj.anio_numero = pens[5];
+            obj.anio_id = pens[6];
+            obj.est_nombres = pens[7];
+            obj.est_apellidos = pens[8];
+            obj.est_cedula = pens[9];
+
+            pensiones.push(obj);
+        });
+        return res.json(pensiones);
     } catch (error) {
         return res.json({ message: "Error al obtener pensiones" });
+    }
+}
+
+async function getAllEstudiantesNames(req, res) {
+    try {
+        let estudiantesNames = [];
+        let sql = `SELECT est.est_cedula, est.est_nombres, est.est_apellidos FROM estudiantes est`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay estudiantes registrados" });
+        result.forEach(est => {
+            let obj = {};
+            obj.pers_ced = est[0];
+            obj.pers_nombres = `${est[1]} ${est[2]}`;
+            estudiantesNames.push(obj);
+        });
+        return res.json(estudiantesNames);
+    } catch (error) {
+        return res.json({ message: "Error obtener personal" });
     }
 }
 
@@ -74,4 +108,5 @@ module.exports = {
     getAllPensiones,
     updatePension,
     deletePension,
+    getAllEstudiantesNames
 }

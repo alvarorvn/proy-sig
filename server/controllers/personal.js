@@ -26,6 +26,7 @@ async function register(req, res) {
 
 async function getAllPersonal(req, res) {
     try {
+        let personas = [];
         let sql = `SELECT personal.pers_cedula, personal.pers_nombres, personal.pers_apellidos, personal.pers_email, personal.pers_fecha_nac, 
         personal.pers_telf, personal.pers_sexo, personal.pers_tipo, ciudades.ciudad_nombre, ciudades.ciudad_id FROM personal, ciudades 
         WHERE personal.ciudad_id = ciudades.ciudad_id`;
@@ -34,14 +35,28 @@ async function getAllPersonal(req, res) {
             let datef = validacion.formatt_date(personal[4]);
             personal[4] = datef;
         });
-        if (result.length == 0) return res.json({ message: "No hay usuarios registrados" });
-        return res.json(result);
+        result.forEach(pers => {
+            let obj = {};
+            obj.pers_cedula = pers[0];
+            obj.pers_nombres = pers[1];
+            obj.pers_apellidos = pers[2];
+            obj.pers_email = pers[3];
+            obj.pers_fecha_nac = pers[4];
+            obj.pers_telf = pers[5];
+            obj.pers_sexo = pers[6];
+            obj.pers_tipo = pers[7];
+            obj.ciudad_nombre = pers[8];
+            obj.ciudad_id = pers[9];
+            personas.push(obj);
+        });
+        if (result.length == 0) return res.json({ message: "No hay usuarios registrados", result });
+        return res.json(personas);
     } catch (error) {
         return res.json({ message: "Error obtener personal" });
     }
 }
 
-async function getAllPersonalNames(req, res) {
+/*async function getAllPersonalNames(req, res) {
     try {
         let personalNames = [];
         let sql = `SELECT pers.pers_cedula, pers.pers_nombres, pers.pers_apellidos FROM personal pers`;
@@ -57,7 +72,7 @@ async function getAllPersonalNames(req, res) {
     } catch (error) {
         return res.json({ message: "Error obtener personal" });
     }
-}
+}*/
 
 async function getPersonal(req, res) {
     try {
@@ -83,10 +98,17 @@ async function deletePersonal(req, res) {
 
 async function getCiudades(req, res) {
     try {
+        let ciudades = [];
         let sql = `SELECT * FROM ciudades`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
         if (result.length == 0) return res.json({ message: "No hay ciudades registradas", tipo: "error" });
-        return res.json(result);
+        result.forEach(ciudad => {
+            let obj = {};
+            obj.ciudad_id = ciudad[0];
+            obj.ciudad_nombre = ciudad[1];
+            ciudades.push(obj);
+        });
+        return res.json(ciudades);
     } catch (err) {
         return res.json({ message: "Error al buscar ciudades", tipo: "error" });
     }
@@ -121,6 +143,5 @@ module.exports = {
     getPersonal,
     updatePersonal,
     deletePersonal,
-    getCiudades,
-    getAllPersonalNames
+    getCiudades
 }

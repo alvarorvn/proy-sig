@@ -22,8 +22,11 @@ export class EstudiantesComponent implements OnInit {
     rep_cedula: "0"
   }
 
-  sexo: string[] = ["Masculino", "Femenino"];
-  ciudades: Array<Object> = [["0", "Seleccionar..."]];
+  sexo: Array<Object> = [
+    { sexo_id: 'M', sexo_nombre: 'Masculino' },
+    { sexo_id: 'F', sexo_nombre: 'Femenino' }
+  ];
+  ciudades: Array<Object> = [];
   representantes: Array<Object> = [["0", "Seleccionar..."]];
   allEstudiantes: Array<Object> = [];
 
@@ -33,13 +36,15 @@ export class EstudiantesComponent implements OnInit {
     private estudianteService: EstudiantesService,
     private toastr: ToastrService
   ) {
-    this.estudiante['est_sexo'] = this.sexo[0];
   }
 
   ngOnInit() {
     this.getCiudades();
     this.getAllEstudiantes();
     this.getRepresentantes();
+    this.estudiante.est_sexo = null;
+    this.estudiante.ciudad_id = null;
+    this.estudiante.rep_cedula = null;
   }
 
   save() {
@@ -65,6 +70,7 @@ export class EstudiantesComponent implements OnInit {
         res => {
           if (res.tipo == 'error') {
             this.toastr.error(res.message, "Error");
+            this.getAllEstudiantes();
           } else {
             this.toastr.success(res.message, "Éxito");
             this.getAllEstudiantes();
@@ -79,13 +85,7 @@ export class EstudiantesComponent implements OnInit {
   }
 
   editEstudiante(estudianteEdit) {
-    this.estudiante.est_cedula = estudianteEdit[0];
-    this.estudiante.est_nombres = estudianteEdit[1];
-    this.estudiante.est_apellidos = estudianteEdit[2];
-    this.estudiante.est_fecha_nac = estudianteEdit[3];
-    this.estudiante.est_sexo = estudianteEdit[4];
-    this.estudiante.ciudad_id = estudianteEdit[6];
-    this.estudiante.rep_cedula = estudianteEdit[9];
+    this.estudiante = estudianteEdit;
     (<HTMLInputElement>document.getElementById("est_cedula")).disabled = true;
   }
 
@@ -119,10 +119,7 @@ export class EstudiantesComponent implements OnInit {
   getRepresentantes() {
     this.repreService.getAllRepresentante().subscribe(
       res => {
-        res.forEach(representante => {
-          this.representantes.push(representante);
-        });
-        this.estudiante.rep_cedula = this.representantes[0][0];
+        this.representantes = res;
       },
       err => {
         console.log(err);
@@ -133,10 +130,7 @@ export class EstudiantesComponent implements OnInit {
   getCiudades() {
     this.personalService.getCiudades().subscribe(
       res => {
-        res.forEach(ciudad => {
-          this.ciudades.push(ciudad);
-        });
-        this.estudiante['ciudad_id'] = this.ciudades[0][0];
+        this.ciudades = res;
       },
       err => {
         console.log(err);
@@ -152,13 +146,14 @@ export class EstudiantesComponent implements OnInit {
   }
 
   clearForm(estudiante) {
-    estudiante.est_cedula = "";
-    estudiante.est_nombres = "";
-    estudiante.est_apellidos = "";
-    estudiante.est_fecha_nac = "";
-    estudiante.est_sexo = this.sexo[0];
-    estudiante.ciudad_id = "0";
-    estudiante.rep_cedula = "0";
+    estudiante.est_cedula = null;
+    estudiante.est_nombres = null;
+    estudiante.est_apellidop = null;
+    estudiante.est_apellidom = null;
+    estudiante.est_fecha_nac = null;
+    estudiante.est_sexo = null;
+    estudiante.ciudad_id = null;
+    estudiante.rep_cedula = null;
   }
 
 }

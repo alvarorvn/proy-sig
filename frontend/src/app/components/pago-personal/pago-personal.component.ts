@@ -3,7 +3,6 @@ import { PersonalService } from "../../services/personal.service";
 import { PagoPersonalService } from "../../services/pago-personal.service";
 import { ToastrService } from "ngx-toastr";
 import { NgForm } from '@angular/forms';
-import { $ } from 'protractor';
 
 
 @Component({
@@ -36,7 +35,7 @@ export class PagoPersonalComponent implements OnInit {
 
   ngOnInit() {
     this.getAllPagoPersonal();
-    this.getAllPersonalNames();
+    //this.getAllPersonalNames();
     this.getMeses();
     this.getaAnios();
     this.pago_pers.anio_id = null;
@@ -113,15 +112,13 @@ export class PagoPersonalComponent implements OnInit {
     )
   }
 
-  lleno
-
-  getAllPersonalNames() {
+  /*getAllPersonalNames() {
     this.personalService.getAllPersonalNames().subscribe(
       res => {
         this.allPersonalNames = res;
       }
     )
-  }
+  }*/
 
   getMeses() {
     this.pagoPersonalService.getMeses().subscribe(

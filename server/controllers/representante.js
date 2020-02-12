@@ -23,16 +23,25 @@ async function register(req, res) {
     }
 }
 
-async function getAllRepresentante(req, res) {
+async function getAllRepresentantes(req, res) {
     try {
-        let sql = `SELECT representantes.rep_cedula, representantes.rep_nombres, representantes.rep_apellidos, representantes.rep_email, 
-        representantes.rep_telf, ciudades.ciudad_nombre, ciudades.ciudad_id FROM representantes, ciudades 
-        WHERE representantes.ciudad_id = ciudades.ciudad_id`;
+        let representantes = [];
+        let sql = `SELECT rep.rep_cedula, rep.rep_nombres, rep.rep_apellidop, rep.rep_apellidom,
+                            rep.rep_email, rep.rep_telf, ciu.ciudad_nombre, ciu.ciudad_id 
+                            FROM representantes rep, ciudades ciu
+                            WHERE rep.ciudad_id = ciu.ciudad_id`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
         if (result.length == 0) return res.json({ message: "No hay representantes registrados" });
-        return res.json(result);
+        result.forEach(rep => {
+            let obj = {};
+            obj.rep_cedula = rep[0]; obj.rep_nombres = rep[1]; obj.rep_apellidop = rep[2];
+            obj.rep_apellidom = rep[3]; obj.rep_email = rep[4]; obj.rep_telf = rep[5];
+            obj.ciudad_nombre = rep[6]; obj.ciudad_id = rep[7]; obj.rep_ncompleto = `${rep[1]} ${rep[2]} ${rep[3]}`;
+            representantes.push(obj);
+        });
+        return res.json(representantes);
     } catch (error) {
-        return res.json({ message: "Error al obtener representante" });
+        return res.json({ message: "Error al obtener representantes" });
     }
 }
 
@@ -64,7 +73,7 @@ async function updateRepresentante(req, res) {
         || validacion.campoVacio(rep_email) || validacion.campoVacio(rep_telf) || validacion.campoVacio(ciudad_id)
         || ciudad_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
-    try {        
+    try {
         let sql = `SELECT * FROM representantes where rep_cedula = '${req.params.ced}'`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
         if (!result) return res.json({ message: "No existe representante registrado a editar", tipo: "error" });
@@ -82,7 +91,7 @@ async function updateRepresentante(req, res) {
 
 module.exports = {
     register,
-    getAllRepresentante,
+    getAllRepresentantes,
     //getPersonal,
     updateRepresentante,
     deleteRepresentante

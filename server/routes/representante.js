@@ -5,7 +5,7 @@ const validacion = require('../controllers/validaciones.js');
 
 //router.get('/ciudades', validacion.verifyToken, personal.getCiudades);
 router.post('/', validacion.verifyToken, representante.register);
-router.get('/', validacion.verifyToken, representante.getAllRepresentante);
+router.get('/', validacion.verifyToken, representante.getAllRepresentantes);
 //router.get('/:ced', validacion.verifyToken, representante.getRepresentante);
 router.put('/:ced', validacion.verifyToken, representante.updateRepresentante);
 router.delete('/:ced', validacion.verifyToken, representante.deleteRepresentante);

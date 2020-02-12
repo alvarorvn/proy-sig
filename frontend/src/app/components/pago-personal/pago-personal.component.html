@@ -41,23 +41,14 @@
                         <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Mes</label>
-                                <!--<select class="form-control" [(ngModel)]="pago_pers.mes_id" name="mes_id">
-                                    <option *ngFor="let mes of meses" [value]="mes.mes_id">{{mes.mes_nombre}}</option>
-                                </select>-->
                                 <ng-select placeholder="Buscar mes" [items]="meses" bindLabel="mes_nombre"
-                                    bindValue="mes_id" [(ngModel)]="pago_pers.mes_id" name="mes_id" id="mes_id"
-                                    [closeOnSelect]=true>
+                                    bindValue="mes_id" [(ngModel)]="pago_pers.mes_id" name="mes_id" id="mes_id">
                                 </ng-select>
                             </div>
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Año</label>
-                                <!--<select class="form-control" [(ngModel)]="pago_pers.anio_id" name="anio_id">
-                                    <option *ngFor="let anio of anios" [value]="anio.anio_id">{{anio.anio_numero}}
-                                    </option>
-                                </select>-->
                                 <ng-select placeholder="Buscar año" [items]="anios" bindLabel="anio_numero"
-                                    bindValue="anio_id" [(ngModel)]="pago_pers.anio_id" name="anio_id"
-                                    [closeOnSelect]=true>
+                                    bindValue="anio_id" [(ngModel)]="pago_pers.anio_id" name="anio_id">
                                 </ng-select>
                             </div>
                         </div>
@@ -115,10 +106,4 @@
             </tbody>
         </table>
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $('.datepicker').datepicker();
-        });
-    </script>
 </div>

@@ -79,7 +79,11 @@ export class PersonalComponent implements OnInit {
   getAllPersonal() {
     this.personalService.getAllPersonal().subscribe(
       res => {
-        this.allPersonal = res;
+        if (res.result) {
+          this.allPersonal = res.result;
+        } else {
+          this.allPersonal = res;
+        }
       },
       err => {
         console.log(err);
@@ -95,15 +99,15 @@ export class PersonalComponent implements OnInit {
   }
 
   clearForm(personal) {
-    personal.pers_cedula = "";
-    personal.pers_nombres = "";
-    personal.pers_apellidos = "";
-    personal.pers_email = "";
-    personal.pers_fecha_nac = "";
-    personal.pers_telf = "";
-    personal.pers_sexo = this.sexo[0];
-    personal.pers_tipo = this.tipos[0];
-    personal.ciudad_id = "0";
+    personal.pers_cedula = null;
+    personal.pers_nombres = null;
+    personal.pers_apellidos = null;
+    personal.pers_email = null;
+    personal.pers_fecha_nac = null;
+    personal.pers_telf = null;
+    personal.pers_sexo = null;
+    personal.pers_tipo = null;
+    personal.ciudad_id = null;
   }
 
   getCiudades() {
@@ -121,7 +125,7 @@ export class PersonalComponent implements OnInit {
   }
 
   editPersonal(personalEdit) {
-    this.personal.pers_cedula = personalEdit[0];
+    /*this.personal.pers_cedula = personalEdit[0];
     this.personal.pers_nombres = personalEdit[1];
     this.personal.pers_apellidos = personalEdit[2];
     this.personal.pers_email = personalEdit[3];
@@ -129,7 +133,8 @@ export class PersonalComponent implements OnInit {
     this.personal.pers_telf = personalEdit[5];
     this.personal.pers_sexo = personalEdit[6];
     this.personal.pers_tipo = personalEdit[7];
-    this.personal.ciudad_id = personalEdit[9];
+    this.personal.ciudad_id = personalEdit[9];*/
+    this.personal = personalEdit;
     (<HTMLInputElement>document.getElementById("pers_cedula")).disabled = true;
   }
 
