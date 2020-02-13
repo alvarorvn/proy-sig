@@ -1,1 +1,103 @@
-<p>otros-ingresos works!</p>
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-primary center-h">
+            <div class="card-header">Registro/actualización de otros ingresos</div>
+            <div class="card-body">
+                <form #ingresoForm="ngForm">
+                    <fieldset>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-8">
+                                <input type="text" [(ngModel)]="ingreso.ingr_id" class="form-control"
+                                    name="ingr_id" type="hidden">
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Abono</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control" [(ngModel)]="ingreso.ingr_abono"
+                                        name="ingr_abono" placeholder="Abono" required autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-12">
+                                <label style="margin: 0;">Descripcion</label>
+                                <input type="text" [(ngModel)]="ingreso.ingr_descripcion" class="form-control"
+                                    name="ingr_descripcion" placeholder="Descripcion" required>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Mes</label>
+                                <ng-select placeholder="Buscar mes" [items]="meses" bindLabel="mes_nombre"
+                                    bindValue="mes_id" [(ngModel)]="ingreso.mes_id" name="mes_id" id="mes_id">
+                                </ng-select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Año</label>
+                                <ng-select placeholder="Buscar año" [items]="anios" bindLabel="anio_numero"
+                                    bindValue="anio_id" [(ngModel)]="ingreso.anio_id" name="anio_id">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <button class="btn btn-primary" style="margin-right: 30px; width: 110px;" (click)="save()">
+                                Guardar
+                            </button>
+                            <button class="btn btn-primary" style="width: 110px;" (click)="resetForm(ingresoForm)">
+                                Limpiar
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="form-group">
+            <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
+        </div>
+        <table class="table table-sm table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <th>Descripcion</th>
+                    <th>Abono</th>
+                    <th>Mes</th>
+                    <th>Año</th>
+                    <th colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="allOtrosIngresos.length == 0; else tablaLlena">
+                    <tr>
+                        <td colspan="6" style="color: red;">No hay registros de cobros!</td>
+                    </tr>
+                </ng-container>
+                <ng-template #tablaLlena>
+                    <tr *ngFor="let oi of allOtrosIngresos |filter:searchText|
+                    paginate: {itemsPerPage: 11, currentPage: p}">
+                        <td>{{ oi.ingr_descripcion }}</td>
+                        <td>{{ oi.ingr_abono }}</td>
+                        <td>{{ oi.mes_nombre }}</td>
+                        <td>{{ oi.anio_numero }}</td>
+                        <td>
+                            <a (click)="editOtroIngreso(oi)">
+                                <i class="fas fa-edit btn btn-outline-success btn-sm"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a (click)="deleteOtroIngreso(oi.ingr_id)">
+                                <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
+            maxSize="15"></pagination-controls>
+    </div>
+</div>

@@ -78,21 +78,7 @@ export class OtrosPagosComponent implements OnInit {
     this.otro_pago = otroPagoEdit;
   }
 
-  deleteOtroPago(pgotro_id) {
-    this.otroPagoService.deleteOtroPago(pgotro_id).subscribe(
-      res => {
-        if (res.tipo == 'error') {
-          this.toastr.error(res.message, "Error");
-        } else {
-          this.toastr.success(res.message, "Éxito");
-          this.getAllOtrosPagos();
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    )
-  }
+  otroIngresoEdit
 
   getAllOtrosPagos() {
     this.otroPagoService.getAllOtrosPagos().subscribe(
