@@ -53,6 +53,7 @@ async function getAllPersonal(req, res) {
             obj.pers_tipo = pers[8];
             obj.ciudad_nombre = pers[9];
             obj.ciudad_id = pers[10];
+            obj.ncompleto = `${pers[1]} ${pers[2]} ${pers[3]}`;
             personas.push(obj);
         });
         if (result.length == 0) return res.json({ message: "No hay usuarios registrados", result });

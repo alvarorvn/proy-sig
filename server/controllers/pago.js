@@ -27,7 +27,7 @@ async function getAllPagos(req, res) {
         let sql = `SELECT pago.pgdoc_id, pago.pgdoc_abono, pago.pgdoc_deuda,
                     mes.mes_nombre, pago.mes_id,
                     anio.anio_numero, pago.anio_id,
-                    pers.pers_nombres, pers.pers_apellidos, pago.pers_cedula
+                    pers.pers_nombres, pers.pers_apellidop, pers.pers_apellidom, pers.pers_tipo, pago.pers_cedula
             FROM pago_personal pago, meses mes , anios anio, personal pers
             WHERE pago.mes_id = mes.mes_id AND pago.anio_id = anio.anio_id AND pago.pers_cedula = pers.pers_cedula`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
@@ -42,8 +42,10 @@ async function getAllPagos(req, res) {
             obj.anio_numero = mes[5];
             obj.anio_id = mes[6];
             obj.pers_nombres = mes[7];
-            obj.pers_apellidos = mes[8];
-            obj.pers_cedula = mes[9];
+            obj.pers_apellidop = mes[8];
+            obj.pers_apellidom = mes[9];
+            obj.pers_tipo = mes[10];
+            obj.pers_cedula = mes[11];
 
             pagosPersonal.push(obj);
         });

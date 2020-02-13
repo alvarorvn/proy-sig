@@ -10,10 +10,14 @@
                                 <input type="text" [(ngModel)]="pago_pers.pgdoc_id" class="form-control" name="pgdoc_id"
                                     type="hidden">
                                 <label style="margin: 0;">Personal</label>
-                                <ng-select placeholder="Buscar personal" [items]="allPersonalNames"
-                                    bindLabel="pers_nombres" bindValue="pers_ced" [(ngModel)]="pago_pers.pers_cedula"
-                                    name="pers_cedula" autofocus>
+                                <ng-select placeholder="Buscar personal" [items]="allPersonal" bindLabel="ncompleto"
+                                    [(ngModel)]="persSelected" name="pers_cedula" (change)="setTipo()" autofocus>
                                 </ng-select>
+                            </div>
+                            <div class="form-group col-4">
+                                <label style="margin: 0;">Tipo</label>
+                                <input type="text" [(ngModel)]="tipo" class="form-control"
+                                    name="tipo" placeholder="Tipo" readonly>
                             </div>
                         </div>
                         <div class="row" style="margin: auto;">
@@ -67,10 +71,14 @@
     </div>
 
     <div class="col-md-7">
+        <div class="form-group">
+            <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
+        </div>
         <table class="table table-sm table-hover">
-            <thead class="thead-dark">
+            <thead class="bg-primary">
                 <tr>
                     <th>Personal</th>
+                    <th>Tipo</th>
                     <th>Abono</th>
                     <th>Deuda</th>
                     <th>Mes</th>
@@ -81,19 +89,21 @@
             <tbody>
                 <ng-container *ngIf="allPagosPersonal.length == 0; else tablaLlena">
                     <tr>
-                        <td colspan="7" style="color: red;">No hay registros de pagos!</td>
+                        <td colspan="8" style="color: red;">No hay registros de pagos!</td>
                     </tr>
                 </ng-container>
                 <ng-template #tablaLlena>
-                    <tr *ngFor="let pp of allPagosPersonal">
-                        <td>{{ pp.pers_nombres }} {{ pp.pers_apellidos }}</td>
+                    <tr *ngFor="let pp of allPagosPersonal |filter:searchText|
+                    paginate: {itemsPerPage: 11, currentPage: p}">
+                        <td>{{ pp.pers_nombres }} {{ pp.pers_apellidop }} {{ pp.pers_apellidom }}</td>
+                        <td>{{ pp.pers_tipo }}</td>
                         <td>{{ pp.pgdoc_abono }}</td>
                         <td>{{ pp.pgdoc_deuda }}</td>
                         <td>{{ pp.mes_nombre }}</td>
                         <td>{{ pp.anio_numero }}</td>
                         <td>
                             <a (click)="editPagoPersonal(pp)">
-                                <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
+                                <i class="fas fa-edit btn btn-outline-success btn-sm"></i>
                             </a>
                         </td>
                         <td>
@@ -105,5 +115,7 @@
                 </ng-template>
             </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
+            maxSize="15"></pagination-controls>
     </div>
 </div>

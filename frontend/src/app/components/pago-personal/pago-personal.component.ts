@@ -21,8 +21,11 @@ export class PagoPersonalComponent implements OnInit {
     pers_cedula: "",
   }
 
+  p: number = 1;
+  persSelected = {};
+  tipo = "";
   allPagosPersonal: Array<Object> = [];
-  allPersonalNames: Array<Object> = [];
+  allPersonal: Array<Object> = [];
   meses: Array<Object> = [];
   anios: Array<Object> = [];
 
@@ -35,7 +38,7 @@ export class PagoPersonalComponent implements OnInit {
 
   ngOnInit() {
     this.getAllPagoPersonal();
-    //this.getAllPersonalNames();
+    this.getAllPersonal();
     this.getMeses();
     this.getaAnios();
     this.pago_pers.anio_id = null;
@@ -45,6 +48,7 @@ export class PagoPersonalComponent implements OnInit {
 
   save() {
     if (this.pago_pers.pgdoc_id) {
+      this.pago_pers.pers_cedula = this.persSelected['pers_cedula'];
       this.pagoPersonalService.updatePagoPersonal(this.pago_pers).subscribe(
         res => {
           if (res.tipo == 'error') {
@@ -60,6 +64,7 @@ export class PagoPersonalComponent implements OnInit {
         }
       )
     } else {
+      this.pago_pers.pers_cedula = this.persSelected['pers_cedula'];
       this.pagoPersonalService.save(this.pago_pers).subscribe(
         res => {
           if (res.tipo == 'error') {
@@ -78,6 +83,8 @@ export class PagoPersonalComponent implements OnInit {
   }
 
   editPagoPersonal(pagoPersonalEdit) {
+    this.persSelected = `${pagoPersonalEdit['pers_nombres']} ${pagoPersonalEdit['pers_apellidop']} ${pagoPersonalEdit['pers_apellidom']}`;
+    this.tipo = pagoPersonalEdit['pers_tipo'];
     this.pago_pers = pagoPersonalEdit;
   }
 
@@ -112,14 +119,6 @@ export class PagoPersonalComponent implements OnInit {
     )
   }
 
-  /*getAllPersonalNames() {
-    this.personalService.getAllPersonalNames().subscribe(
-      res => {
-        this.allPersonalNames = res;
-      }
-    )
-  }*/
-
   getMeses() {
     this.pagoPersonalService.getMeses().subscribe(
       res => {
@@ -136,6 +135,21 @@ export class PagoPersonalComponent implements OnInit {
     )
   }
 
+  getAllPersonal() {
+    this.personalService.getAllPersonal().subscribe(
+      res => {
+        if (res.result) {
+          this.allPersonal = res.result;
+        } else {
+          this.allPersonal = res;
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
+
   resetForm(form?: NgForm) {
     if (form) {
       form.reset();
@@ -143,11 +157,17 @@ export class PagoPersonalComponent implements OnInit {
   }
 
   clearForm(pago_pers) {
+    this.persSelected = null;
     pago_pers.pgdoc_id = null;
     pago_pers.pgdoc_abono = null;
     pago_pers.pgdoc_deuda = null;
     pago_pers.mes_id = null;
     pago_pers.anio_id = null;
     pago_pers.pers_cedula = null;
+    this.tipo = '';
+  }
+
+  setTipo() {
+    this.tipo = this.persSelected['pers_tipo'];
   }
 }
