@@ -21,8 +21,9 @@ export class PensionesComponent implements OnInit {
     est_cedula: "",
   }
 
+  p: number = 1;
   allPensiones: Array<Object> = [];
-  allEstudiantesNames: Array<Object> = [];
+  allEstudiantes: Array<Object> = [];
   meses: Array<Object> = [];
   anios: Array<Object> = [];
 
@@ -35,12 +36,47 @@ export class PensionesComponent implements OnInit {
 
   ngOnInit() {
     this.getAllPensiones();
-    this.getAllEstudiantesNames();
+    this.getAllEstudiantes();
     this.getMeses();
     this.getaAnios();
     this.pension.anio_id = null;
     this.pension.mes_id = null;
     this.pension.est_cedula = null;
+  }
+
+  save() {
+    if (this.pension.pens_id) {
+      this.pensionesService.updatePension(this.pension).subscribe(
+        res => {
+          if (res.tipo == 'error') {
+            this.toastr.error(res.message, "Error");
+          } else {
+            this.toastr.success(res.message, "Éxito");
+            this.getAllPensiones();
+            this.clearForm(this.pension);
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      )
+    } else {
+      this.pensionesService.save(this.pension).subscribe(
+        res => {
+          if (res.tipo == 'error') {
+            this.toastr.error(res.message, "Error");
+            this.getAllPensiones();
+          } else {
+            this.toastr.success(res.message, "Éxito");
+            this.getAllPensiones();
+            this.clearForm(this.pension);
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      )
+    }
   }
 
   getAllPensiones() {
@@ -58,12 +94,35 @@ export class PensionesComponent implements OnInit {
     )
   }
 
-  getAllEstudiantesNames() {
-    /*this.estudianteService.getAllPersonalNames().subscribe(
+  editPension(pensionEdit) {
+    this.pension = pensionEdit;
+  }
+
+  deletePension(pens_id) {
+    this.pensionesService.deletePension(pens_id).subscribe(
       res => {
-        //this.allPersonalNames = res;
+        if (res.tipo == 'error') {
+          this.toastr.error(res.message, "Error");
+        } else {
+          this.toastr.success(res.message, "Éxito");
+          this.getAllPensiones();
+        }
+      },
+      err => {
+        console.log(err);
       }
-    )*/
+    )
+  }
+
+  getAllEstudiantes() {
+    this.estudianteService.getAllEstudiante().subscribe(
+      res => {
+        this.allEstudiantes = res;
+      },
+      err => {
+        console.log(err);
+      }
+    )
   }
 
   getMeses() {
@@ -82,4 +141,18 @@ export class PensionesComponent implements OnInit {
     )
   }
 
+  clearForm(pension) {
+    pension.pens_id = null;
+    pension.pens_abono = null;
+    pension.pens_deuda = null;
+    pension.mes_id = null;
+    pension.anio_id = null;
+    pension.est_cedula = null;
+  }
+
+  resetForm(form?: NgForm) {
+    if (form) {
+      form.reset();
+    }
+  }
 }

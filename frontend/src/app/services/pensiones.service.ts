@@ -10,27 +10,19 @@ export class PensionesService {
 
   constructor(private http: HttpClient) { }
 
-  getMeses() {
-    return this.http.get<any>(`${this.URL}/pagos/meses`);
-  }
-
-  getAnios() {
-    return this.http.get<any>(`${this.URL}/pagos/anios`);
-  }
-
-  save(pago_pers) {
-    return this.http.post<any>(`${this.URL}/pagos`, pago_pers);
+  save(pension) {
+    return this.http.post<any>(`${this.URL}/cobros/p`, pension);
   }
 
   getAllPensiones() {
     return this.http.get<any>(`${this.URL}/cobros/p`);
   }
 
-  updatePagoPersonal(pago_pers) {
-    return this.http.put<any>(`${this.URL}/pagos/${pago_pers.pgdoc_id}`, pago_pers);
+  updatePension(pension) {
+    return this.http.put<any>(`${this.URL}/cobros/p/${pension.pens_id}`, pension);
   }
 
-  deletePagoPersonal(pgdoc_id) {
-    return this.http.delete<any>(`${this.URL}/pagos/${pgdoc_id}`);
+  deletePension(pens_id) {
+    return this.http.delete<any>(`${this.URL}/cobros/p/${pens_id}`);
   }
 }

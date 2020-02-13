@@ -46,7 +46,8 @@ async function getAllEstudiantes(req, res) {
             obj.est_cedula = est[0]; obj.est_nombres = est[1]; obj.est_apellidop = est[2];
             obj.est_apellidom = est[3]; obj.est_fecha_nac = est[4]; obj.est_sexo = est[5];
             obj.ciudad_nombre = est[6]; obj.ciudad_id = est[7]; obj.rep_nombres = est[8];
-            obj.rep_apellidop = est[9]; obj.rep_apellidom = est[10]; obj.rep_cedula = est[11];
+            obj.rep_apellidop = est[9]; obj.rep_apellidom = est[10]; obj.rep_cedula = est[11];            
+            obj.ncompleto = `${est[1]} ${est[2]} ${est[3]}`;
             estudiantes.push(obj);
         });
         return res.json(estudiantes);

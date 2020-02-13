@@ -10,8 +10,8 @@
                                 <input type="text" [(ngModel)]="pension.pens_id" class="form-control" name="pens_id"
                                     type="hidden">
                                 <label style="margin: 0;">Estudiante</label>
-                                <ng-select placeholder="Buscar estudiante" [items]="allEstudiantesNames"
-                                    bindLabel="est_nombres" bindValue="est_cedula" [(ngModel)]="pension.est_cedula"
+                                <ng-select placeholder="Buscar estudiante" [items]="allEstudiantes"
+                                    bindLabel="ncompleto" bindValue="est_cedula" [(ngModel)]="pension.est_cedula"
                                     name="est_cedula" autofocus>
                                 </ng-select>
                             </div>
@@ -41,19 +41,12 @@
                         <div class="row" style="margin: auto;">
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Mes</label>
-                                <!--<select class="form-control" [(ngModel)]="pago_pers.mes_id" name="mes_id">
-                                    <option *ngFor="let mes of meses" [value]="mes.mes_id">{{mes.mes_nombre}}</option>
-                                </select>-->
                                 <ng-select placeholder="Buscar mes" [items]="meses" bindLabel="mes_nombre"
                                     bindValue="mes_id" [(ngModel)]="pension.mes_id" name="mes_id" id="mes_id">
                                 </ng-select>
                             </div>
                             <div class="form-group col-6">
                                 <label style="margin: 0;">Año</label>
-                                <!--<select class="form-control" [(ngModel)]="pago_pers.anio_id" name="anio_id">
-                                    <option *ngFor="let anio of anios" [value]="anio.anio_id">{{anio.anio_numero}}
-                                    </option>
-                                </select>-->
                                 <ng-select placeholder="Buscar año" [items]="anios" bindLabel="anio_numero"
                                     bindValue="anio_id" [(ngModel)]="pension.anio_id" name="anio_id">
                                 </ng-select>
@@ -74,10 +67,13 @@
     </div>
 
     <div class="col-md-7">
+        <div class="form-group">
+            <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
+        </div>
         <table class="table table-sm table-hover">
-            <thead class="thead-dark">
+            <thead class="bg-primary">
                 <tr>
-                    <th>Esudiante</th>
+                    <th>Estudiante</th>
                     <th>Abono</th>
                     <th>Deuda</th>
                     <th>Mes</th>
@@ -92,15 +88,16 @@
                     </tr>
                 </ng-container>
                 <ng-template #tablaLlena>
-                    <tr *ngFor="let pens of allPensiones">
-                        <td>{{ pens.est_nombres }} {{ pens.est_apellidos }}</td>
+                    <tr *ngFor="let pens of allPensiones |filter:searchText|
+                    paginate: {itemsPerPage: 11, currentPage: p}">
+                        <td>{{ pens.est_nombres }} {{ pens.est_apellidop }} {{ pens.est_apellidom }}</td>
                         <td>{{ pens.pens_abono }}</td>
                         <td>{{ pens.pens_deuda }}</td>
                         <td>{{ pens.mes_nombre }}</td>
                         <td>{{ pens.anio_numero }}</td>
                         <td>
                             <a (click)="editPension(pens)">
-                                <i class="fas fa-edit btn btn-outline-info btn-sm"></i>
+                                <i class="fas fa-edit btn btn-outline-success btn-sm"></i>
                             </a>
                         </td>
                         <td>
@@ -112,5 +109,7 @@
                 </ng-template>
             </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
+            maxSize="15"></pagination-controls>
     </div>
 </div>

@@ -2,7 +2,9 @@ const oracleUtil = require('../database/oracleUtil');
 const validacion = require('./validaciones.js');
 
 async function addPension(req, res) {
-    const { pens_abono, pens_deuda, mes_id, anio_id, est_cedula } = req.body;
+    var { pens_abono, pens_deuda, mes_id, anio_id, est_cedula } = req.body;
+    if(pens_abono === null) pens_abono = '';
+    if(pens_deuda === null) pens_deuda = '';
     if (validacion.campoVacio(pens_abono.toString()) || validacion.campoVacio(pens_deuda.toString()) || validacion.campoVacio(mes_id)
         || validacion.campoVacio(anio_id) || validacion.campoVacio(est_cedula) || mes_id == 0 || anio_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
@@ -16,7 +18,6 @@ async function addPension(req, res) {
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Pension registrada con exito", tipo: "exito" });
     } catch (error) {
-        console.log(error);
         return res.json({ message: "Error al registrar pension", tipo: "error" });
     }
 }
@@ -27,7 +28,7 @@ async function getAllPensiones(req, res) {
         let sql = `SELECT pens.pens_id, pens.pens_abono, pens.pens_deuda,
                     mes.mes_nombre, pens.mes_id,
                     anio.anio_numero, pens.anio_id,
-                    est.est_nombres, est.est_apellidos, pens.est_cedula
+                    est.est_nombres, est.est_apellidop, est.est_apellidom, pens.est_cedula
             FROM pensiones pens, meses mes , anios anio, estudiantes est
             WHERE pens.mes_id = mes.mes_id AND pens.anio_id = anio.anio_id AND pens.est_cedula = est.est_cedula`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
@@ -42,8 +43,9 @@ async function getAllPensiones(req, res) {
             obj.anio_numero = pens[5];
             obj.anio_id = pens[6];
             obj.est_nombres = pens[7];
-            obj.est_apellidos = pens[8];
-            obj.est_cedula = pens[9];
+            obj.est_apellidop = pens[8];
+            obj.est_apellidom = pens[9];
+            obj.est_cedula = pens[10];
 
             pensiones.push(obj);
         });
