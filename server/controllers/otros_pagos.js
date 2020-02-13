@@ -2,7 +2,8 @@ const oracleUtil = require('../database/oracleUtil');
 const validacion = require('./validaciones.js');
 
 async function addOtroPago(req, res) {
-    const { pgotro_abono, pgotro_descripcion, mes_id, anio_id } = req.body;
+    var { pgotro_abono, pgotro_descripcion, mes_id, anio_id } = req.body;
+    if(pgotro_abono === null) pgotro_abono = '';
     if (validacion.campoVacio(pgotro_abono.toString()) || validacion.campoVacio(pgotro_descripcion) || validacion.campoVacio(mes_id)
         || validacion.campoVacio(anio_id) || mes_id == 0 || anio_id == 0)
         return res.json({ message: "Llene los campos del formulario", tipo: "error" });
@@ -12,25 +13,33 @@ async function addOtroPago(req, res) {
         if (result) return res.json({ message: "Ya existe un pago registrado para este usuario con esa fecha", tipo: "error" });*/
         sql = `INSERT INTO otros_pagos 
             (pgotro_abono, pgotro_descripcion, mes_id, anio_id)
-            VALUES (${pgotro_abono}, '${pgotro_descripcion}', '${mes_id}', '${anio_id}')`;
+            VALUES (${pgotro_abono}, '${pgotro_descripcion.toUpperCase()}', '${mes_id}', '${anio_id}')`;
         result = await oracleUtil.open(sql, [], true, res);
         if (result == 1) return res.json({ message: "Pago registrado con exito", tipo: "exito" });
     } catch (error) {
-        console.log(error);
         return res.json({ message: "Error al registrar pago", tipo: "error" });
     }
 }
 
 async function getAllOtrosPagos(req, res) {
     try {
+        let otros_pagos = [];
         let sql = `SELECT pago.pgotro_id, pago.pgotro_abono, pago.pgotro_descripcion,
                             mes.mes_nombre, pago.mes_id,
                             anio.anio_numero, pago.anio_id
                     FROM otros_pagos pago, meses mes , anios anio
                     WHERE pago.mes_id = mes.mes_id AND pago.anio_id = anio.anio_id`;
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
-        if (result.length == 0) return res.json({ message: "No hay pagos registrados" });
-        return res.json(result);
+        if (result.length == 0) return res.json({ message: "No hay pagos registrados", result });
+        result.forEach(op => {
+            let obj = {};
+
+            obj.pgotro_id = op[0]; obj.pgotro_abono = op[1]; obj.pgotro_descripcion = op[2];
+            obj.mes_nombre = op[3]; obj.mes_id = op[4]; obj.anio_numero = op[5]; obj.anio_id = op[6];
+
+            otros_pagos.push(obj);
+        });
+        return res.json(otros_pagos);
     } catch (error) {
         return res.json({ message: "Error al obtener pagos" });
     }
@@ -57,7 +66,7 @@ async function updateOtroPago(req, res) {
         let result = JSON.parse(await oracleUtil.open(sql, [], false, res))[0];
         if (!result) return res.json({ message: "No existe un pago registrado a editar", tipo: "error" });
         sql = `UPDATE otros_pagos SET
-                        pgotro_abono = ${pgotro_abono}, pgotro_descripcion = '${pgotro_descripcion}', 
+                        pgotro_abono = ${pgotro_abono}, pgotro_descripcion = '${pgotro_descripcion.toUpperCase()}', 
                         mes_id = '${mes_id}', anio_id= '${anio_id}'
                 WHERE pgotro_id = '${req.params.id}'`;
         result = await oracleUtil.open(sql, [], true, res);
