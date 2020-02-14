@@ -55,24 +55,6 @@ async function getAllPensiones(req, res) {
     }
 }
 
-async function getAllEstudiantesNames(req, res) {
-    try {
-        let estudiantesNames = [];
-        let sql = `SELECT est.est_cedula, est.est_nombres, est.est_apellidos FROM estudiantes est`;
-        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
-        if (result.length == 0) return res.json({ message: "No hay estudiantes registrados" });
-        result.forEach(est => {
-            let obj = {};
-            obj.pers_ced = est[0];
-            obj.pers_nombres = `${est[1]} ${est[2]}`;
-            estudiantesNames.push(obj);
-        });
-        return res.json(estudiantesNames);
-    } catch (error) {
-        return res.json({ message: "Error obtener personal" });
-    }
-}
-
 async function deletePension(req, res) {
     try {
         let sql = `DELETE FROM pensiones where pens_id = '${req.params.id}'`;
@@ -109,6 +91,5 @@ module.exports = {
     addPension,
     getAllPensiones,
     updatePension,
-    deletePension,
-    getAllEstudiantesNames
+    deletePension
 }

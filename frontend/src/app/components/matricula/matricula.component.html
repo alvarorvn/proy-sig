@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-primary center-h">
+            <div class="card-header">Registro/actualización de matriculas</div>
+            <div class="card-body">
+                <form #matriculasForm="ngForm">
+                    <fieldset>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-8">
+                                <input type="text" [(ngModel)]="matricula.matr_id" class="form-control" name="matr_id"
+                                    type="hidden">
+                                <label style="margin: 0;">Estudiante</label>
+                                <ng-select placeholder="Buscar estudiante" [items]="allEstudiantes"
+                                    bindLabel="ncompleto" bindValue="est_cedula" [(ngModel)]="matricula.est_cedula"
+                                    name="est_cedula" autofocus>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: auto;">
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Monto</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control" [(ngModel)]="matricula.mat_monto"
+                                        name="mat_monto" placeholder="Monto" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label style="margin: 0;">Periodo lectivo</label>
+                                <input type="text" [(ngModel)]="matricula.mat_per_lectivo" class="form-control"
+                                    name="mat_per_lectivo" placeholder="Periodo lectivo" required>
+                            </div>
+                        </div>
+                        <div class="row" style="justify-content: center;">
+                            <button class="btn btn-primary" style="margin-right: 30px; width: 110px;" (click)="save()">
+                                Guardar
+                            </button>
+                            <button class="btn btn-primary" style="width: 110px;" (click)="resetForm(matriculasForm)">
+                                Limpiar
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="form-group">
+            <input class="form-control form-control" type="text" placeholder="Buscar..." [(ngModel)]="searchText">
+        </div>
+        <table class="table table-sm table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Monto</th>
+                    <th>Periodo lectivo</th>
+                    <th colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="allMatriculas.length == 0; else tablaLlena">
+                    <tr>
+                        <td colspan="5" style="color: red;">No hay registros de matriculas!</td>
+                    </tr>
+                </ng-container>
+                <ng-template #tablaLlena>
+                    <tr *ngFor="let matr of allMatriculas |filter:searchText|
+                    paginate: {itemsPerPage: 11, currentPage: p}">
+                        <td>{{ matr.est_nombres }} {{ matr.est_apellidop }} {{ matr.est_apellidom }}</td>
+                        <td>{{ matr.mat_monto }}</td>
+                        <td>{{ matr.mat_per_lectivo }}</td>
+                        <td>
+                            <a (click)="editMatricula(matr)">
+                                <i class="fas fa-edit btn btn-outline-success btn-sm"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a (click)="deleteMatricula(matr.matr_id)">
+                                <i class="fas fa-trash-alt btn btn-outline-danger btn-sm"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
+            maxSize="15"></pagination-controls>
+    </div>
+</div>

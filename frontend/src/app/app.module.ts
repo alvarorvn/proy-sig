@@ -23,6 +23,8 @@ import { PagoPersonalComponent } from './components/pago-personal/pago-personal.
 import { OtrosPagosComponent } from './components/otros-pagos/otros-pagos.component';
 import { PensionesComponent } from './components/pensiones/pensiones.component';
 import { OtrosIngresosComponent } from './components/otros-ingresos/otros-ingresos.component';
+import { MatriculaComponent } from './components/matricula/matricula.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { OtrosIngresosComponent } from './components/otros-ingresos/otros-ingres
     PagoPersonalComponent,
     OtrosPagosComponent,
     PensionesComponent,
-    OtrosIngresosComponent
+    OtrosIngresosComponent,
+    MatriculaComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -10,14 +10,16 @@ import { PagoPersonalComponent } from "./components/pago-personal/pago-personal.
 import { OtrosPagosComponent } from "./components/otros-pagos/otros-pagos.component";
 import { PensionesComponent } from "./components/pensiones/pensiones.component";
 import { OtrosIngresosComponent } from "./components/otros-ingresos/otros-ingresos.component";
+import { MatriculaComponent } from "./components/matricula/matricula.component";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
 
 import { AuthGuard, AuthGuard2 } from "./auth.guard";
 
 const routes: Routes = [
   {
     path: '',
-    component: IndexComponent
-    /*redirectTo: '/login',
+    component: IndexComponent/*,
+    redirectTo: '/login',
     pathMatch: 'full'*/
   },
   {
@@ -53,6 +55,16 @@ const routes: Routes = [
   {
     path: 'oingresos',
     component: OtrosIngresosComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'matriculas',
+    component: MatriculaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
     canActivate: [AuthGuard]
   },
   {
