@@ -31,7 +31,8 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
               "src/public/JS/popper.min.js",
-              "src/public/JS/bootstrap.min.js"
+              "src/public/JS/bootstrap.min.js",
+              "node_modules/chart.js/dist/Chart.js"
             ]
           },
           "configurations": {

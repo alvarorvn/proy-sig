@@ -12,6 +12,10 @@ import { PensionesComponent } from "./components/pensiones/pensiones.component";
 import { OtrosIngresosComponent } from "./components/otros-ingresos/otros-ingresos.component";
 import { MatriculaComponent } from "./components/matricula/matricula.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { EstadisticaOneComponent } from "./components/estadistica-one/estadistica-one.component";
+import { EstadisticaTwoComponent } from "./components/estadistica-two/estadistica-two.component";
+import { EstadisticaThreeComponent } from "./components/estadistica-three/estadistica-three.component";
+import { EstadisticaFourComponent } from "./components/estadistica-four/estadistica-four.component";
 
 import { AuthGuard, AuthGuard2 } from "./auth.guard";
 
@@ -63,7 +67,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dashboard',
+    path: 'estadistica',
     component: DashboardComponent,
     canActivate: [AuthGuard]
   },

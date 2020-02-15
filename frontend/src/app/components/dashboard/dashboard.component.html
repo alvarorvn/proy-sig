@@ -1,1 +1,28 @@
-
+<ul class="nav nav-tabs" style="margin: 10px 25px 0px 25px;">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#pensionXmesanio">Pensiones</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#porcEstDeudas">Deudas de estudiantes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#ganacias">Ganancias</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#cantEst">Cantidad estudiantes</a>
+    </li>
+</ul>
+<div id="myTabContent" class="tab-content" style="margin: 10px 25px 0px 25px;">
+    <div class="tab-pane fade active show" id="pensionXmesanio">
+        <app-estadistica-one></app-estadistica-one>
+    </div>
+    <div class="tab-pane fade" id="porcEstDeudas">
+        <app-estadistica-two></app-estadistica-two>
+    </div>
+    <div class="tab-pane fade" id="ganacias">
+        <app-estadistica-three></app-estadistica-three>
+    </div>
+    <div class="tab-pane fade" id="cantEst">
+        <app-estadistica-four></app-estadistica-four>
+    </div>
+</div>

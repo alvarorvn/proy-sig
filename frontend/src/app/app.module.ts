@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Ng2SearchPipeModule } from "ng2-search-filter";
 import { NgxPaginationModule } from "ngx-pagination";
+import { ChartsModule } from "ng2-charts";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +26,10 @@ import { PensionesComponent } from './components/pensiones/pensiones.component';
 import { OtrosIngresosComponent } from './components/otros-ingresos/otros-ingresos.component';
 import { MatriculaComponent } from './components/matricula/matricula.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { EstadisticaOneComponent } from './components/estadistica-one/estadistica-one.component';
+import { EstadisticaTwoComponent } from './components/estadistica-two/estadistica-two.component';
+import { EstadisticaThreeComponent } from './components/estadistica-three/estadistica-three.component';
+import { EstadisticaFourComponent } from './components/estadistica-four/estadistica-four.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     PensionesComponent,
     OtrosIngresosComponent,
     MatriculaComponent,
-    DashboardComponent
+    DashboardComponent,
+    EstadisticaOneComponent,
+    EstadisticaTwoComponent,
+    EstadisticaThreeComponent,
+    EstadisticaFourComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +63,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     }),
     NgSelectModule,
     Ng2SearchPipeModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ChartsModule
   ],
   providers: [
     AuthGuard,

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" style="margin: 50px 25px 0px 25px;">
     <div class="col-md-5">
         <div class="card border-primary center-h">
             <div class="card-header">Registro/actualización de representantes</div>
@@ -71,7 +71,7 @@
                 <tr>
                     <th>Cedula</th>
                     <th>Nombre Completo</th>
-                    <th>Correo</th>
+                    <!--<th>Correo</th>-->
                     <th>Telefono</th>
                     <th>Ciudad</th>
                     <th colspan="2"></th>
@@ -88,7 +88,7 @@
                     paginate: {itemsPerPage: 11, currentPage: p}">
                         <td>{{ rep.rep_cedula }}</td>
                         <td>{{ rep.rep_nombres }} {{ rep.rep_apellidop }} {{ rep.rep_apellidom }}</td>
-                        <td>{{ rep.rep_email }}</td>
+                        <!--<td>{{ rep.rep_email }}</td>-->
                         <td>{{ rep.rep_telf }}</td>
                         <td>{{ rep.ciudad_nombre }}</td>
                         <td>
@@ -106,6 +106,6 @@
             </tbody>
         </table>
         <pagination-controls (pageChange)="p = $event" autoHide="true" previousLabel="Anterior" nextLabel="Siguiente"
-            maxSize="15"></pagination-controls>
+            maxSize="12"></pagination-controls>
     </div>
 </div>
