@@ -95,10 +95,65 @@ async function getCountEstPerLectivo(req, res){
     }
 }
 
+async function getSumPensiones(req, res){
+    try {
+        let matriculas = [];
+        let sql = `select sum(pens_abono), anio_id from pensiones group by anio_id`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay matriculas registradas", result });
+        result.forEach(mat => {
+            let obj = {};
+            obj.total_pensiones = mat[0]; obj.anio_id = mat[1];
+
+            matriculas.push(obj);
+        });
+        return res.json(matriculas);
+    } catch (error) {
+        return res.json({ message: "Error al obtener matriculas" });
+    }
+}
+
+async function getSumMatricula(req, res){
+    try {
+        let matriculas = [];
+        let sql = `select sum(mat_monto), mat_per_lectivo from matriculas group by mat_per_lectivo`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay matriculas registradas", result });
+        result.forEach(mat => {
+            let obj = {};
+            obj.total_matriculas = mat[0]; obj.mat_per_lectivo = mat[1];
+
+            matriculas.push(obj);
+        });
+        return res.json(matriculas);
+    } catch (error) {
+        return res.json({ message: "Error al obtener matriculas" });
+    }
+}
+
+async function getSumOtrosIngresos(req, res){
+    try {
+        let matriculas = [];
+        let sql = `select sum(ingr_abono), anio_id from otros_ingresos group by anio_id`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay matriculas registradas", result });
+        result.forEach(mat => {
+            let obj = {};
+            obj.total_otros_ingresos = mat[0]; obj.anio_id = mat[1];
+
+            matriculas.push(obj);
+        });
+        return res.json(matriculas);
+    } catch (error) {
+        return res.json({ message: "Error al obtener matriculas" });
+    }
+}
+
 module.exports = {
     addMatricula,
     getAllMatriculas,
     updateMatricula,
     deleteMatricula,
-    getCountEstPerLectivo
+    getCountEstPerLectivo,
+    getSumPensiones, getSumMatricula, getSumOtrosIngresos
 }

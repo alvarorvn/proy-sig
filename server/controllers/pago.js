@@ -67,6 +67,7 @@ async function deletePago(req, res) {
 }
 
 async function updatePago(req, res) {
+    console.log(req.body);
     const { pgdoc_abono, pgdoc_deuda, mes_id, anio_id, pers_cedula } = req.body;
     if (validacion.campoVacio(pgdoc_abono.toString()) || validacion.campoVacio(pgdoc_deuda.toString()) || validacion.campoVacio(mes_id)
         || validacion.campoVacio(anio_id) || validacion.campoVacio(pers_cedula) || mes_id == 0 || anio_id == 0)

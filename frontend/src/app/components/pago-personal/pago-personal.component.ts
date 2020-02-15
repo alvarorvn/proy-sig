@@ -22,7 +22,8 @@ export class PagoPersonalComponent implements OnInit {
   }
 
   p: number = 1;
-  persSelected = {};
+  persSelected = "";
+  cedSelected = "";
   tipo = "";
   allPagosPersonal: Array<Object> = [];
   allPersonal: Array<Object> = [];
@@ -48,7 +49,8 @@ export class PagoPersonalComponent implements OnInit {
 
   save() {
     if (this.pago_pers.pgdoc_id) {
-      this.pago_pers.pers_cedula = this.persSelected['pers_cedula'];
+      this.pago_pers.pers_cedula = this.cedSelected;
+      console.log(this.pago_pers);
       this.pagoPersonalService.updatePagoPersonal(this.pago_pers).subscribe(
         res => {
           if (res.tipo == 'error') {
@@ -84,6 +86,7 @@ export class PagoPersonalComponent implements OnInit {
 
   editPagoPersonal(pagoPersonalEdit) {
     this.persSelected = `${pagoPersonalEdit['pers_nombres']} ${pagoPersonalEdit['pers_apellidop']} ${pagoPersonalEdit['pers_apellidom']}`;
+    this.cedSelected = pagoPersonalEdit['pers_cedula'];
     this.tipo = pagoPersonalEdit['pers_tipo'];
     this.pago_pers = pagoPersonalEdit;
   }
