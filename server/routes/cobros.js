@@ -17,6 +17,7 @@ router.delete('/o/:id', validacion.verifyToken, otros_ingresos.deleteOtroIngreso
 
 router.post('/m', validacion.verifyToken, matriculas.addMatricula);
 router.get('/m', validacion.verifyToken, matriculas.getAllMatriculas);
+router.get('/mc', validacion.verifyToken, matriculas.getCountEstPerLectivo);
 router.put('/m/:id', validacion.verifyToken, matriculas.updateMatricula);
 router.delete('/m/:id', validacion.verifyToken, matriculas.deleteMatricula);
 

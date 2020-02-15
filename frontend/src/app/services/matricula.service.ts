@@ -18,6 +18,10 @@ export class MatriculaService {
     return this.http.get<any>(`${this.URL}/cobros/m`);
   }
 
+  consulta1() {
+    return this.http.get<any>(`${this.URL}/cobros/mc`);
+  }
+
   updateMatricula(matricula) {
     return this.http.put<any>(`${this.URL}/cobros/m/${matricula.matr_id}`, matricula);
   }

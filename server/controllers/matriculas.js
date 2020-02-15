@@ -74,9 +74,31 @@ async function updateMatricula(req, res) {
     }
 }
 
+async function getCountEstPerLectivo(req, res){
+    try {
+        let matriculas = [];
+        let sql = `SELECT mat_per_lectivo, COUNT(est_cedula)
+                    FROM matriculas 
+                    GROUP BY mat_per_lectivo 
+                    ORDER BY mat_per_lectivo asc`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay matriculas registradas", result });
+        result.forEach(mat => {
+            let obj = {};
+            obj.mat_per_lectivo = mat[0]; obj.cant_est = mat[1];
+
+            matriculas.push(obj);
+        });
+        return res.json(matriculas);
+    } catch (error) {
+        return res.json({ message: "Error al obtener matriculas" });
+    }
+}
+
 module.exports = {
     addMatricula,
     getAllMatriculas,
     updateMatricula,
-    deleteMatricula
+    deleteMatricula,
+    getCountEstPerLectivo
 }
