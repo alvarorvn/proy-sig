@@ -99,7 +99,7 @@ export class EstadisticaFourComponent implements OnInit {
     console.log(data);
 
     new Chart(this.ctx, {
-      type: 'doughnut',
+      type: 'horizontalBar',
       data: data,
       options: this.chartOptions
     });
