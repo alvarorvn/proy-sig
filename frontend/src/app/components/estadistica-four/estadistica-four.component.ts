@@ -96,8 +96,6 @@ export class EstadisticaFourComponent implements OnInit {
 
     data['datasets'] = dataSet;
 
-    console.log(data);
-
     new Chart(this.ctx, {
       type: 'horizontalBar',
       data: data,

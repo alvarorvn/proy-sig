@@ -29,4 +29,24 @@ export class MatriculaService {
   deleteMatricula(matr_id) {
     return this.http.delete<any>(`${this.URL}/cobros/m/${matr_id}`);
   }
+
+  getTotalPensiones() {
+    return this.http.get<any>(`${this.URL}/cobros/mtotpens`);
+  }
+
+  getTotalMatriculas() {
+    return this.http.get<any>(`${this.URL}/cobros/mtotmatr`);
+  }
+
+  getTotalOtrosIngresos() {
+    return this.http.get<any>(`${this.URL}/cobros/mtototingr`);
+  }
+
+  getTotalOtrosPagos() {
+    return this.http.get<any>(`${this.URL}/cobros/mtototpagos`);
+  }
+
+  getTotalPagos() {
+    return this.http.get<any>(`${this.URL}/cobros/mtotpagos`);
+  }
 }

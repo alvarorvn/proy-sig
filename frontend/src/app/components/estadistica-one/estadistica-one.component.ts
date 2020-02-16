@@ -28,10 +28,10 @@ export class EstadisticaOneComponent implements OnInit {
     'rgba(11, 58, 232, 0.2)'
   ]
   bordeColor = [
-    'rgba(213, 54, 54, 0.5)',
-    'rgba(26, 138, 220, 0.5)',
-    'rgba(13, 161, 40, 0.5)',
-    'rgba(11, 58, 232, 0.5)'
+    'rgba(213, 54, 54, 1)',
+    'rgba(26, 138, 220, 1)',
+    'rgba(13, 161, 40, 1)',
+    'rgba(11, 58, 232, 1)'
   ]
   canvasPens = null;
   ctx = null;

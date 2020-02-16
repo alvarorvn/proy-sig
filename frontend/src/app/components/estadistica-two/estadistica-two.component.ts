@@ -21,10 +21,10 @@ export class EstadisticaTwoComponent implements OnInit {
   allPensionesPorcEst: Array<Object> = [];
   totalPensionMes = [];
   fondoColor = [
-    'rgba(92, 113, 194, 1)',
-    'rgba(165, 92, 194, 1)',
-    'rgba(194, 92, 93, 1)',
-    'rgba(92, 194, 155)'
+    'rgba(92, 113, 194, 0.6)',
+    'rgba(165, 92, 194, 0.6)',
+    'rgba(194, 92, 93, 0.6)',
+    'rgba(92, 194, 155, 0.6)'
   ]
   canvasPorcEst = null;
   ctxPorcEst = null;

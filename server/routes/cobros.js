@@ -18,9 +18,14 @@ router.delete('/o/:id', validacion.verifyToken, otros_ingresos.deleteOtroIngreso
 router.post('/m', validacion.verifyToken, matriculas.addMatricula);
 router.get('/m', validacion.verifyToken, matriculas.getAllMatriculas);
 router.get('/mc', validacion.verifyToken, matriculas.getCountEstPerLectivo);
-router.get('/mtotpens', validacion.verifyToken, matriculas.getSumPensiones);
-router.get('/mtotmatr', validacion.verifyToken, matriculas.getSumMatricula);
 router.put('/m/:id', validacion.verifyToken, matriculas.updateMatricula);
 router.delete('/m/:id', validacion.verifyToken, matriculas.deleteMatricula);
+
+
+router.get('/mtotpens', validacion.verifyToken, matriculas.getSumPensiones);
+router.get('/mtotmatr', validacion.verifyToken, matriculas.getSumMatricula);
+router.get('/mtototingr', validacion.verifyToken, matriculas.getSumOtrosIngresos);
+router.get('/mtototpagos', validacion.verifyToken, matriculas.getSumOtrosPagos);
+router.get('/mtotpagos', validacion.verifyToken, matriculas.getSumPagos);
 
 module.exports = router;

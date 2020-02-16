@@ -74,7 +74,7 @@ async function updateMatricula(req, res) {
     }
 }
 
-async function getCountEstPerLectivo(req, res){
+async function getCountEstPerLectivo(req, res) {
     try {
         let matriculas = [];
         let sql = `SELECT mat_per_lectivo, COUNT(est_cedula)
@@ -95,7 +95,7 @@ async function getCountEstPerLectivo(req, res){
     }
 }
 
-async function getSumPensiones(req, res){
+async function getSumPensiones(req, res) {
     try {
         let matriculas = [];
         let sql = `select sum(pens_abono), anio_id from pensiones group by anio_id`;
@@ -113,7 +113,7 @@ async function getSumPensiones(req, res){
     }
 }
 
-async function getSumMatricula(req, res){
+async function getSumMatricula(req, res) {
     try {
         let matriculas = [];
         let sql = `select sum(mat_monto), mat_per_lectivo from matriculas group by mat_per_lectivo`;
@@ -131,7 +131,7 @@ async function getSumMatricula(req, res){
     }
 }
 
-async function getSumOtrosIngresos(req, res){
+async function getSumOtrosIngresos(req, res) {
     try {
         let matriculas = [];
         let sql = `select sum(ingr_abono), anio_id from otros_ingresos group by anio_id`;
@@ -149,11 +149,48 @@ async function getSumOtrosIngresos(req, res){
     }
 }
 
+async function getSumPagos(req, res) {
+    try {
+        let matriculas = [];
+        let sql = `select sum(pgdoc_abono), anio_id from pago_personal group by anio_id`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay matriculas registradas", result });
+        result.forEach(mat => {
+            let obj = {};
+            obj.total_pagos = mat[0]; obj.anio_id = mat[1];
+
+            matriculas.push(obj);
+        });
+        return res.json(matriculas);
+    } catch (error) {
+        return res.json({ message: "Error al obtener matriculas" });
+    }
+}
+
+async function getSumOtrosPagos(req, res) {
+    try {
+        let matriculas = [];
+        let sql = `select sum(pgotro_abono), anio_id from otros_pagos group by anio_id`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay matriculas registradas", result });
+        result.forEach(mat => {
+            let obj = {};
+            obj.total_otros_pagos = mat[0]; obj.anio_id = mat[1];
+
+            matriculas.push(obj);
+        });
+        return res.json(matriculas);
+    } catch (error) {
+        return res.json({ message: "Error al obtener matriculas" });
+    }
+}
+
 module.exports = {
     addMatricula,
     getAllMatriculas,
     updateMatricula,
     deleteMatricula,
     getCountEstPerLectivo,
-    getSumPensiones, getSumMatricula, getSumOtrosIngresos
+    getSumPensiones, getSumMatricula, getSumOtrosIngresos,
+    getSumOtrosPagos, getSumPagos
 }
