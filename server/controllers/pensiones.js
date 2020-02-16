@@ -55,6 +55,29 @@ async function getAllPensiones(req, res) {
     }
 }
 
+async function getTodasPensiones(req, res) {
+    try {
+        let pensiones = [];
+        let sql = `select sum(p.pens_deuda), a.anio_numero, m.mes_nombre from pensiones p, anios a, meses m where p.mes_id=  m.mes_id and p.anio_id = a.anio_id group by anio_numero, mes_nombre`;
+        let result = JSON.parse(await oracleUtil.open(sql, [], false, res));
+        if (result.length == 0) return res.json({ message: "No hay pensiones registradas", result });
+        result.forEach(pens => {
+            let obj = {};
+            obj.total_deuda = pens[0];
+            obj.anio = pens[1];
+            obj.mes = pens[2];
+
+            pensiones.push(obj);
+        });
+        return res.json(pensiones);
+    } catch (error) {
+        console.log(error);
+        return res.json({ message: "Error al obtener pensiones" });
+    }
+}
+
+
+
 async function deletePension(req, res) {
     try {
         let sql = `DELETE FROM pensiones where pens_id = '${req.params.id}'`;
@@ -91,5 +114,6 @@ module.exports = {
     addPension,
     getAllPensiones,
     updatePension,
-    deletePension
+    deletePension,
+    getTodasPensiones
 }

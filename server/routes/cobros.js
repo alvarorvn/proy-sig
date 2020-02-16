@@ -9,6 +9,7 @@ router.post('/p', validacion.verifyToken, pensiones.addPension);
 router.get('/p', validacion.verifyToken, pensiones.getAllPensiones);
 router.put('/p/:id', validacion.verifyToken, pensiones.updatePension);
 router.delete('/p/:id', validacion.verifyToken, pensiones.deletePension);
+router.get('/pens', validacion.verifyToken, pensiones.getTodasPensiones);
 
 router.post('/o', validacion.verifyToken, otros_ingresos.addOtroIngreso);
 router.get('/o', validacion.verifyToken, otros_ingresos.getAllOtrosIngresos);
