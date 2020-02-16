@@ -18,6 +18,10 @@ export class PensionesService {
     return this.http.get<any>(`${this.URL}/cobros/p`);
   }
 
+  getTodasPensiones() {
+    return this.http.get<any>(`${this.URL}/cobros/pens`);
+  }
+
   updatePension(pension) {
     return this.http.put<any>(`${this.URL}/cobros/p/${pension.pens_id}`, pension);
   }

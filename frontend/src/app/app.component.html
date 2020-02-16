@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ng-container *ngIf="authService.loggedIn();">
         <ul class="navbar-nav">
-          <ng-container *ngIf="authService.getRol() == 'SECRETARIA' || authService.getRol() == 'ADMIN';">
+          <ng-container *ngIf="authService.getRol() == 'SECRETARIA' || authService.getRol() == 'ADMINISTRADOR';">
             <li class="nav-item dropdown" routerLinkActive="active">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                 aria-expanded="false">Registro</a>

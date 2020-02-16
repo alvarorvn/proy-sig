@@ -67,9 +67,10 @@ export class EstadisticaTwoComponent implements OnInit {
   }
 
   getAllPensionePorcEst() {
-    this.pensionService.getAllPensiones().subscribe(
+    this.pensionService.getTodasPensiones().subscribe(
       res => {
         this.allPensionesPorcEst = res;
+        console.log(res);
       }
       ,
       err => { })
@@ -85,28 +86,32 @@ export class EstadisticaTwoComponent implements OnInit {
 
     this.aniosPorcEst.forEach(year => {
       let totAnio = 0;
-      let pensTotalMes = [];
+      let totalporcXmes = [];
       let objDataSet = {};
       objDataSet['label'] = year['anio_numero'];
 
       this.allPensionesPorcEst.forEach(pension => {
-        if (pension['anio_numero'] == year['anio_numero']) {
-          totAnio = totAnio + pension['pens_deuda'];
+        if (pension['anio'] == year['anio_numero']) {
+          totAnio = totAnio + pension['total_deuda'];
         }
       });
 
+      console.log(`anio ${year['anio_numero']} ${totAnio}`);
+
       this.chartLabelMesPorcEst.forEach(mes => {
-        let totMes = 0;
+        let porcXmes = 0;
         this.allPensionesPorcEst.forEach(pension => {
-          if (pension['anio_numero'] == year['anio_numero'] && pension['mes_nombre'] == mes) {
-            totMes = totMes + pension['pens_deuda'];
+          if (pension['anio'] == year['anio_numero'] && pension['mes'] == mes) {
+            
+          porcXmes = parseFloat((pension['total_deuda']*(100/totAnio)).toFixed(2));
           }
         });
-        let porcXmes = parseFloat((totMes*(100/totAnio)).toFixed(2));
-        if(isNaN(porcXmes)) porcXmes = 0.00;
-        pensTotalMes.push(porcXmes);
-        objDataSet['data'] = pensTotalMes;
+
+        if(isNaN(porcXmes)) porcXmes = 0.00;        
+        totalporcXmes.push(porcXmes);
+        objDataSet['data'] = totalporcXmes;
       });
+      console.log(totalporcXmes);
 
       objDataSet['backgroundColor'] = this.fondoColor[cont];
       cont++;
@@ -115,6 +120,7 @@ export class EstadisticaTwoComponent implements OnInit {
     });
 
     data['datasets'] = dataSet;
+    console.log(data);
 
     new Chart(this.ctxPorcEst, {
       type: 'bar',
