@@ -1,0 +1,32 @@
+<div class="row" style="margin: 50px 25px 0px 25px;">
+    <div class="col-md-4 mx-auto">
+        <div class="card border-primary center-h" style="max-width: 21rem;">
+            <div class="card-header">Registro de usuario</div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.username" class="form-control" name="username"
+                            placeholder="Usuario" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" [(ngModel)]="user.password" class="form-control" name="password"
+                            placeholder="Contraseña" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <ng-select placeholder="Seleccionar rol" [items]="roles" bindLabel="rol_nombre" bindValue="rol_id"
+                            [(ngModel)]="user.rol_id" name="rol_id">
+                        </ng-select>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="margin-right: 5px;" (click)="register()">
+                            Registrar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Limpiar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

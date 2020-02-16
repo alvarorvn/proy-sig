@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid" style="margin: 0px 50px 0px 50px">
+    <a routerLink="/"><img src="../assets/logo.png" style="width: 40px; margin-right: 10px;"></a>
     <a class="navbar-brand" routerLink="/">SIG EDUCLATINO</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
       aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +45,9 @@
         <ng-container *ngIf="!authService.loggedIn(); else loggedIn">
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" routerLink="/login">Login</a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/register">Registrar</a>
           </li>
         </ng-container>
         <ng-template #loggedIn>

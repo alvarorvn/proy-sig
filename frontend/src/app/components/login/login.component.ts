@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -13,18 +14,22 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
   }
 
   login() {
-    console.log(this.user);
     this.authService.login(this.user).subscribe(
       res => {
-        localStorage.setItem('token', res.token);
-        this.router.navigate(['/']);
+        if (res.tipo == 'error') {
+          this.toastr.error(res.message, "Error");
+        } else {
+          localStorage.setItem('token', res.token);
+          this.router.navigate(['/']);
+        }
       },
       err => {
         console.log(err);

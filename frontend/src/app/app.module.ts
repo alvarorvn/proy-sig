@@ -30,6 +30,7 @@ import { EstadisticaOneComponent } from './components/estadistica-one/estadistic
 import { EstadisticaTwoComponent } from './components/estadistica-two/estadistica-two.component';
 import { EstadisticaThreeComponent } from './components/estadistica-three/estadistica-three.component';
 import { EstadisticaFourComponent } from './components/estadistica-four/estadistica-four.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { EstadisticaFourComponent } from './components/estadistica-four/estadist
     EstadisticaOneComponent,
     EstadisticaTwoComponent,
     EstadisticaThreeComponent,
-    EstadisticaFourComponent
+    EstadisticaFourComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,14 @@ export class AuthService {
     return this.http.post<any>(`${this.URL}/login`, user);
   }
 
+  register(user) {
+    return this.http.post<any>(`${this.URL}/register`, user);
+  }
+
+  getRoles() {
+    return this.http.get<any>(`${this.URL}/roles`);
+  }
+
   loggedIn() {
     return !!localStorage.getItem('token');
   }
