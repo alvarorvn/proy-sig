@@ -30,11 +30,16 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  getRol() {
+    return localStorage.getItem('rol');
+  }
+
   getToken() {
     return localStorage.getItem('token');
   }
 
   logout() {
+    localStorage.removeItem('rol');
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }

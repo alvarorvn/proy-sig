@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
         if (res.tipo == 'error') {
           this.toastr.error(res.message, "Error");
         } else {
+          localStorage.setItem('rol', res.user.rol_nombre);
           localStorage.setItem('token', res.token);
           this.router.navigate(['/']);
         }

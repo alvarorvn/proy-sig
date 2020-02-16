@@ -5,19 +5,18 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Ng2SearchPipeModule } from "ng2-search-filter";
 import { NgxPaginationModule } from "ngx-pagination";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ChartsModule } from "ng2-charts";
+import { ToastrModule } from "ngx-toastr";
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-
 import { AuthGuard } from "./auth.guard";
 import { TokenInterceptorService } from "./services/token-interceptor.service";
 import { IndexComponent } from './components/index/index.component';
 import { PersonalComponent } from './components/personal/personal.component';
-
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ToastrService, ToastrModule } from "ngx-toastr";
 import { RepresentantesComponent } from './components/representantes/representantes.component';
 import { EstudiantesComponent } from './components/estudiantes/estudiantes.component';
 import { PagoPersonalComponent } from './components/pago-personal/pago-personal.component';
